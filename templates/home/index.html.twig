@@ -11,7 +11,7 @@
 			<div class="col-lg-2 card m-2 p-0">
 				<a href="#!"><img class="card-img-top w-100" src="https://dummyimage.com/700x400/dee2e6/6c757d.jpg"></a>
 				<div class="card-body p-1 d-flex flex-rox justify-content-between align-content-center">
-					{% include "parts/_trick_card.html.twig" with { trick: { name: "Trick name" }} %}
+					{% include "parts/_tricks_card.html.twig" with { tricks: { name: "Tricks name" }} %}
 				</div>
 			</div>
 		{% endfor %}
@@ -27,5 +27,5 @@
 		</div>
 	</div>
 
-	{% include "parts/_trick_delete_modal.html.twig" %}
+	{% include "parts/_tricks_delete_modal.html.twig" %}
 {% endblock %}
