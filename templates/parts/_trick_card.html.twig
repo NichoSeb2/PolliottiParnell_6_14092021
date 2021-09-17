@@ -1,0 +1,12 @@
+<h5 class="card-title m-0 p-1">{{ trick.name }}</h5>
+
+{% if app.user %}
+	<div>
+		<button type="submit" class="btn p-1 fs-6">
+			<i class="fas fa-pencil-alt"></i>
+		</button>
+		<button type="button" class="btn p-1 fs-6" data-bs-toggle="modal" data-bs-target="#trickDeleteModal">
+			<i class="fas fa-trash-alt"></i>
+		</button>
+	</div>
+{% endif %}

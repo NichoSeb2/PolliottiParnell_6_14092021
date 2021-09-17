@@ -1,0 +1,27 @@
+<nav class="position-fixed position-lg-absolute zi-1 navbar navbar-expand-lg navbar-light w-100">
+	<div class="container w-100 mw-100">
+		<a class="navbar-brand fs-4 fw-bold" href="/">SnowTricks</a>
+		<button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav ms-auto mb-2 mb-lg-0 fs-5">
+				<li class="nav-item">
+					<a class="nav-link {{ app.request.requestUri == '/' ? 'active' : '' }}" href="/">Home</a>
+				</li>
+				{% if app.user %}
+					<li class="nav-item">
+						<a class="nav-link {{ app.request.requestUri == '/logout' ? 'active' : '' }}" href="/logout">Logout</a>
+					</li>
+				{% else %}
+					<li class="nav-item">
+						<a class="nav-link {{ app.request.requestUri == '/login' ? 'active' : '' }}" href="/login">Login</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link {{ app.request.requestUri == '/register' ? 'active' : '' }}" href="/register">Register</a>
+					</li>
+				{% endif %}
+			</ul>
+		</div>
+	</div>
+</nav>

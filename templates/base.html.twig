@@ -1,19 +1,35 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <title>{% block title %}Welcome!{% endblock %}</title>
+		<meta name="author" content="Parnell Polliotti">
+		<meta name="description" content="">
 
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
+		<title>
+			{% block title %}
+				SnowTricks
+			{% endblock %}
+		</title>
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
+		<link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
+
+		{% block stylesheets %}
+			{{ encore_entry_link_tags('app') }}
+		{% endblock %}
+
+		{% block javascripts %}
+			{{ encore_entry_script_tags('app') }}
+		{% endblock %}
+	</head>
+	<body>
+		{% include "parts/_nav.html.twig" %}
+
+		{% include "parts/_header.html.twig" %}
+
+		<main id="top" class="position-relative container d-flex flex-row flex-wrap justify-content-center align-content-center">{% block body %}{% endblock %}</main>
+
+        {% include "parts/_footer.html.twig" %}
     </body>
 </html>

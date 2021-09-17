@@ -10,3 +10,6 @@ import './styles/app.scss';
 
 // start the Stimulus application
 import './bootstrap';
+
+import '../node_modules/bootstrap/dist/js/bootstrap.bundle.min';
+import '../node_modules/jquery/dist/jquery.min';
