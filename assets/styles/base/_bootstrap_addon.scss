@@ -1,10 +1,45 @@
+@function rgb-css-var($identifier, $target) {
+	@if $identifier == "body" and $target == "bg" {
+		@return rgb(var(--#{$variable-prefix}#{$identifier}-bg-rgb));
+	}
+	@if $identifier == "body" and $target == "text" {
+		@return rgb(var(--#{$variable-prefix}#{$identifier}-color-rgb));
+	} @else {
+		@return rgb(var(--#{$variable-prefix}#{$identifier}-rgb));
+	}
+}
+
 .fs-0 {
 	font-size: 4rem;
+}
+
+.text-justify {
+	text-align: justify;
+}
+
+.bg-image {
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center center;
+}
+
+.bg-shade {
+	background-color: rgb(122, 122, 122);
+	background-blend-mode: multiply;
+}
+
+.h-2px {
+	height: 2px !important;
+}
+
+.w-80 {
+	width: 80% !important;
 }
 
 @each $breakpoint in map-keys($grid-breakpoints) {
 	@include media-breakpoint-up($breakpoint) {
 		$infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+
 		@each $position in $positions {
 			.position#{$infix}-#{$position} {
 				position: $position !important;
@@ -22,10 +57,27 @@
 @each $breakpoint in map-keys($grid-breakpoints) {
 	@include media-breakpoint-up($breakpoint) {
 		$infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+
 		@each $z in $z-index {
 			.zi#{$infix}-#{$z} {
 				z-index: $z !important;
 			}
+		}
+	}
+}
+
+@each $breakpoint in map-keys($grid-breakpoints) {
+	@include media-breakpoint-up($breakpoint) {
+		$infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+
+		@each $key, $value in map-loop($utilities-bg, rgb-css-var, "$key", "bg") {
+			.bg#{$infix}-#{$key} {
+				background-color: $value !important;
+			}
+		}
+
+		.bg#{$infix}-transparent {
+			background-color: transparent !important;
 		}
 	}
 }

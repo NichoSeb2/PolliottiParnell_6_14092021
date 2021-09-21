@@ -13,7 +13,7 @@
 			{% endblock %}
 		</title>
 
-		<link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
+		<link rel="shortcut icon" href="{{ asset('images/favicon.ico') }}" type="image/x-icon">
 
 		{% block stylesheets %}
 			{{ encore_entry_link_tags('app') }}
@@ -28,7 +28,11 @@
 
 		{% include "parts/_header.html.twig" %}
 
-		<main id="top" class="position-relative container d-flex flex-row flex-wrap justify-content-center align-content-center">{% block body %}{% endblock %}</main>
+		<main id="top" class="position-relative">
+			<div class="container d-flex flex-row flex-wrap justify-content-center align-content-center">
+				{% block body %}{% endblock %}
+			</div>
+		</main>
 
         {% include "parts/_footer.html.twig" %}
     </body>

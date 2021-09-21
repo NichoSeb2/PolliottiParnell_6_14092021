@@ -9,10 +9,7 @@
 	<div class="row justify-content-center align-content-between mt-4 px-2">
 		{% for i in 1..15 %}
 			<div class="col-lg-2 card m-2 p-0">
-				<a href="#!"><img class="card-img-top w-100" src="https://dummyimage.com/700x400/dee2e6/6c757d.jpg"></a>
-				<div class="card-body p-1 d-flex flex-rox justify-content-between align-content-center">
-					{% include "parts/_tricks_card.html.twig" with { tricks: { name: "Tricks name" }} %}
-				</div>
+				{% include "parts/_tricks_card.html.twig" with { tricks: { name: 'Tricks name' }} %}
 			</div>
 		{% endfor %}
 	</div>
@@ -20,12 +17,12 @@
 	<div class="row justify-content-center align-content-between">
 		<div class="col-lg-12 my-4">
 			<button type="button" class="btn btn-secondary m-1">Load more</button>
-
-			<a href="#top" class="btn btn-secondary m-1">
-				<i class="fas fa-chevron-up"></i>
-			</a>
 		</div>
 	</div>
+
+	<a href="#top" class="position-absolute bottom-0 end-0 btn btn-secondary m-4">
+		<i class="fas fa-chevron-up"></i>
+	</a>
 
 	{% include "parts/_tricks_delete_modal.html.twig" %}
 {% endblock %}
