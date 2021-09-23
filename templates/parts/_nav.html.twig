@@ -1,6 +1,6 @@
 <nav class="position-fixed position-lg-absolute zi-1 navbar navbar-expand-lg navbar-light w-100 bg-lg-transparent bg-white">
 	<div class="container w-100 mw-100">
-		<a class="navbar-brand fs-4 fw-bold" href="{{ path('home') }}">SnowTricks</a>
+		<a class="navbar-brand fs-3 fw-bold" href="{{ path('home') }}">SnowTricks</a>
 		<button class="navbar-toggler bg-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
@@ -21,7 +21,7 @@
 						<a class="nav-link {{ app.request.get('_route') == 'login' ? 'active' : '' }}" href="{{ path('login') }}">Connexion</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link {{ app.request.get('_route') == 'register' ? 'active' : '' }}" href="{{ path('register') }}">Register</a>
+						<a class="nav-link {{ app.request.get('_route') == 'register' ? 'active' : '' }}" href="{{ path('register') }}">S'inscrire</a>
 					</li>
 				{% endif %}
 			</ul>
