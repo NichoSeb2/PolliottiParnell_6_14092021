@@ -1,0 +1,7 @@
+{% set relativePages = ['home', 'tricks'] %}
+
+<footer class="{{ app.request.get('_route') not in relativePages ? 'position-absolute bottom-0 start-0' : '' }} {{ app.request.get('_route') in relativePages ? 'border-top' : '' }} py-4 w-100">
+	<div class="container">
+		<p class="m-0 text-center">Copyright &copy; Parnell Polliotti 2021</p>
+	</div>
+</footer>

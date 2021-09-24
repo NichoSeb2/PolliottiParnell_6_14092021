@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{parent()}}
+	- S'inscrire
+{% endblock %}
+
+{% block body %}
+	<article class="container m-0 p-0 text-center translate-middle-y" style="margin-top: -50vh !important; max-height: 455px; max-width: 400px;">
+		<form action="{{ path('register_form') }}" method="post" class="w-100 h-100">
+			<div class="bg-alpha p-2">
+				<h1 class="my-3">S'inscrire</h1>
+				<div class="form-group my-3">
+					<label for="username" class="fs-5">Nom d'utilisateur</label>
+					<input type="text" class="form-control my-1" id="username" name="username" placeholder="Nom d'utilisateur" required="">
+				</div>
+				<div class="form-group my-3">
+					<label for="email" class="fs-5">Adresse e-mail</label>
+					<input type="email" class="form-control my-1" id="email" name="email" placeholder="Adresse e-mail" required="">
+				</div>
+				<div class="form-group my-3">
+					<label for="password" class="fs-5">Mot de passe</label>
+					<input type="password" class="form-control my-1" id="password" name="password" placeholder="Mot de passe" required="">
+				</div>
+				<div class="form-group my-3">
+					<button type="submit" class="btn btn-primary text-light">S'inscrire</button>
+				</div>
+				<div class="form-group my-3">
+					<a href="{{ path('login') }}" class="link-secondary">Déjà membre ?</a>
+				</div>
+			</div>
+		</form>
+	</article>
+{% endblock %}

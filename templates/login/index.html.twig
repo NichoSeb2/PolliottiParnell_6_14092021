@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{parent()}}
+	- Connexion
+{% endblock %}
+
+{% block body %}
+	<article class="container m-0 p-0 text-center translate-middle-y" style="margin-top: -50vh !important; max-height: 400px; max-width: 400px;">
+		<form action="{{ path('login_form') }}" method="post" class="w-100 h-100">
+			<div class="bg-alpha p-2">
+				<h1 class="my-3">Connexion</h1>
+				<div class="form-group my-3">
+					<label for="username" class="fs-5">Nom d'utilisateur</label>
+					<input type="text" class="form-control my-1" id="username" name="username" placeholder="Nom d'utilisateur" required="">
+				</div>
+				<div class="form-group my-3">
+					<label for="password" class="fs-5">Mot de passe</label>
+					<input type="password" class="form-control my-1" id="password" name="password" placeholder="Mot de passe" required="">
+				</div>
+				<div class="form-group my-3">
+					<button type="submit" class="btn btn-primary text-light">Connexion</button>
+				</div>
+				<div class="form-group my-3 mb-1">
+					<a href="{{ path('forgot_password') }}" class="link-secondary">Mot de passe oublié ?</a>
+				</div>
+				<div class="form-group my-3 mt-1">
+					<a href="{{ path('register') }}" class="link-secondary">S'inscrire</a>
+				</div>
+			</div>
+		</form>
+	</article>
+{% endblock %}

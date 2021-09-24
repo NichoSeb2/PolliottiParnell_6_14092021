@@ -1,0 +1,15 @@
+<a href="/tricks/test"><img class="card-img-top w-100" src="https://dummyimage.com/1920x1080/dee2e6/6c757d.jpg"></a>
+<div class="card-body p-1 d-flex flex-rox justify-content-between align-content-center">
+	<h5 class="card-title m-0 p-1">{{ tricks.name }}</h5>
+
+	{% if app.user %}
+		<div>
+			<button type="submit" class="btn p-1 fs-6">
+				<i class="fas fa-pencil-alt"></i>
+			</button>
+			<button type="button" class="btn p-1 fs-6" data-bs-toggle="modal" data-bs-target="#tricksDeleteModal">
+				<i class="fas fa-trash-alt"></i>
+			</button>
+		</div>
+	{% endif %}
+</div>
