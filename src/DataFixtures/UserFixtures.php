@@ -18,6 +18,7 @@ class UserFixtures extends Fixture{
 		$user = new User();
 		$user->setUsername("NichoSeb2");
 		$user->setEmail("parnell.polliotti@play-for-eternity.net");
+		$user->setRoles(['ROLE_ADMIN']);
 		$user->setPassword($this->passwordHasher->hashPassword(
 			$user,
 			'azerty'

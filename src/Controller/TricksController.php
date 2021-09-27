@@ -8,8 +8,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class TricksController extends AbstractController {
-    #[Route('/tricks/{slug}', name: 'tricks')]
-    public function index(string $slug): Response {
+    #[Route('/tricks/{slug}', name: 'app_tricks')]
+    public function tricks(string $slug): Response {
         return $this->render('tricks/tricks.html.twig', [
             'tricks' => [
                 'slug' => $slug, 
