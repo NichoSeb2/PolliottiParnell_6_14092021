@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{parent()}}
+	- S'inscrire
+{% endblock %}
+
+{% block body %}
+	<article class="container m-0 p-0 text-center translate-middle-y" style="margin-top: -50vh !important; max-height: 455px; max-width: 400px;">
+		{{ form_start(form, {
+			class: 'w-100 h-100'
+		}) }}
+			<div class="bg-alpha p-2">
+				<h1 class="my-3">S'inscrire</h1>
+
+				{{ form_row(form.username, {
+					attr: {
+						class: 'my-1'
+					}
+				}) }}
+				{{ form_row(form.email, {
+					attr: {
+						class: 'my-1'
+					}
+				}) }}
+				{{ form_row(form.plainPassword, {
+					attr: {
+						class: 'my-1'
+					}
+				}) }}
+
+				<div class="form-group my-3">
+					<button type="submit" class="btn btn-primary text-light">S'inscrire</button>
+				</div>
+
+				{% if success is defined %}
+                    <div class="alert alert-success">{{ success }}</div>
+                {% endif %}
+
+				<div class="form-group my-3">
+					<a href="{{ path('app_login') }}" class="link-secondary">Déjà membre ?</a>
+				</div>
+			</div>
+		{{ form_end(form) }}
+	</article>
+{% endblock %}
