@@ -28,6 +28,11 @@ class Tricks {
      */
     private $media;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $description;
+
     public function __construct() {
         $this->media = new ArrayCollection();
     }
@@ -69,6 +74,16 @@ class Tricks {
                 $media->setTricks(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDescription(): ?string {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self {
+        $this->description = $description;
 
         return $this;
     }
