@@ -34,6 +34,17 @@ class Comment {
      */
     private $author;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Tricks::class, inversedBy="comments")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $tricks;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $status = 0;
+
     public function getId(): ?int {
         return $this->id;
     }
@@ -54,6 +65,26 @@ class Comment {
 
     public function setAuthor(?User $author): self {
         $this->author = $author;
+
+        return $this;
+    }
+
+    public function getTricks(): ?Tricks {
+        return $this->tricks;
+    }
+
+    public function setTricks(?Tricks $tricks): self {
+        $this->tricks = $tricks;
+
+        return $this;
+    }
+
+    public function getStatus(): ?bool {
+        return $this->status;
+    }
+
+    public function setStatus(bool $status): self {
+        $this->status = $status;
 
         return $this;
     }

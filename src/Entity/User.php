@@ -60,8 +60,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
      */
     private $comments;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isAdmin = false;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Tricks::class, mappedBy="author", orphanRemoval=true)
+     */
+    private $tricks;
+
+    /**
+     * @ORM\Column(type="guid", nullable=true)
+     */
+    private $verificationToken = null;
+
+    /**
+     * @ORM\Column(type="guid", nullable=true)
+     */
+    private $forgotPasswordToken = null;
+
     public function __construct() {
         $this->comments = new ArrayCollection();
+        $this->tricks = new ArrayCollection();
     }
 
     /**
@@ -148,13 +169,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
         return $this;
     }
 
-    public function isVerified(): bool
-    {
+    public function isVerified(): bool {
         return $this->isVerified;
     }
 
-    public function setIsVerified(bool $isVerified): self
-    {
+    public function setIsVerified(bool $isVerified): self {
         $this->isVerified = $isVerified;
 
         return $this;
@@ -183,6 +202,63 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
                 $comment->setAuthor(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isAdmin(): ?bool {
+        return $this->isAdmin;
+    }
+
+    public function setIsAdmin(bool $isAdmin): self {
+        $this->isAdmin = $isAdmin;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Tricks[]
+     */
+    public function getTricks(): Collection {
+        return $this->tricks;
+    }
+
+    public function addTricks(Tricks $tricks): self {
+        if (!$this->tricks->contains($tricks)) {
+            $this->tricks[] = $tricks;
+            $tricks->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTricks(Tricks $tricks): self {
+        if ($this->tricks->removeElement($tricks)) {
+            // set the owning side to null (unless already changed)
+            if ($tricks->getAuthor() === $this) {
+                $tricks->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getVerificationToken(): ?string {
+        return $this->verificationToken;
+    }
+
+    public function setVerificationToken(?string $verificationToken): self {
+        $this->verificationToken = $verificationToken;
+
+        return $this;
+    }
+
+    public function getForgotPasswordToken(): ?string {
+        return $this->forgotPasswordToken;
+    }
+
+    public function setForgotPasswordToken(?string $forgotPasswordToken): self {
+        $this->forgotPasswordToken = $forgotPasswordToken;
 
         return $this;
     }
