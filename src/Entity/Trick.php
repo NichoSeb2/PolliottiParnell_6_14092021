@@ -3,15 +3,15 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use App\Repository\TricksRepository;
+use App\Repository\TrickRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
- * @ORM\Entity(repositoryClass=TricksRepository::class)
+ * @ORM\Entity(repositoryClass=TrickRepository::class)
  */
-class Tricks {
+class Trick {
     /**
      * Hook timestampable behavior
      * updates createdAt, updatedAt fields
@@ -31,7 +31,7 @@ class Tricks {
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity=Media::class, mappedBy="tricks")
+     * @ORM\OneToMany(targetEntity=Media::class, mappedBy="trick")
      */
     private $media;
 
@@ -41,13 +41,13 @@ class Tricks {
     private $description;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="tricks")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="trick")
      * @ORM\JoinColumn(nullable=false)
      */
     private $author;
 
     /**
-     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="tricks", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="trick", orphanRemoval=true)
      */
     private $comments;
 
@@ -80,7 +80,7 @@ class Tricks {
     public function addMedia(Media $media): self {
         if (!$this->media->contains($media)) {
             $this->media[] = $media;
-            $media->setTricks($this);
+            $media->setTrick($this);
         }
 
         return $this;
@@ -89,8 +89,8 @@ class Tricks {
     public function removeMedia(Media $media): self {
         if ($this->media->removeElement($media)) {
             // set the owning side to null (unless already changed)
-            if ($media->getTricks() === $this) {
-                $media->setTricks(null);
+            if ($media->getTrick() === $this) {
+                $media->setTrick(null);
             }
         }
 
@@ -127,7 +127,7 @@ class Tricks {
     public function addComment(Comment $comment): self {
         if (!$this->comments->contains($comment)) {
             $this->comments[] = $comment;
-            $comment->setTricks($this);
+            $comment->setTrick($this);
         }
 
         return $this;
@@ -136,8 +136,8 @@ class Tricks {
     public function removeComment(Comment $comment): self {
         if ($this->comments->removeElement($comment)) {
             // set the owning side to null (unless already changed)
-            if ($comment->getTricks() === $this) {
-                $comment->setTricks(null);
+            if ($comment->getTrick() === $this) {
+                $comment->setTrick(null);
             }
         }
 

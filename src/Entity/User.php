@@ -61,12 +61,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
     private $comments;
 
     /**
-     * @ORM\Column(type="boolean")
-     */
-    private $isAdmin = false;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Tricks::class, mappedBy="author", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Trick::class, mappedBy="author", orphanRemoval=true)
      */
     private $tricks;
 
@@ -206,37 +201,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
         return $this;
     }
 
-    public function isAdmin(): ?bool {
-        return $this->isAdmin;
-    }
-
-    public function setIsAdmin(bool $isAdmin): self {
-        $this->isAdmin = $isAdmin;
-
-        return $this;
-    }
-
     /**
-     * @return Collection|Tricks[]
+     * @return Collection|Trick[]
      */
     public function getTricks(): Collection {
         return $this->tricks;
     }
 
-    public function addTricks(Tricks $tricks): self {
-        if (!$this->tricks->contains($tricks)) {
-            $this->tricks[] = $tricks;
-            $tricks->setAuthor($this);
+    public function addTrick(Trick $trick): self {
+        if (!$this->tricks->contains($trick)) {
+            $this->tricks[] = $trick;
+            $trick->setAuthor($this);
         }
 
         return $this;
     }
 
-    public function removeTricks(Tricks $tricks): self {
-        if ($this->tricks->removeElement($tricks)) {
+    public function removeTrick(Trick $trick): self {
+        if ($this->tricks->removeElement($trick)) {
             // set the owning side to null (unless already changed)
-            if ($tricks->getAuthor() === $this) {
-                $tricks->setAuthor(null);
+            if ($trick->getAuthor() === $this) {
+                $trick->setAuthor(null);
             }
         }
 

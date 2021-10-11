@@ -34,9 +34,9 @@ class Media {
     private $alt;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Tricks::class, inversedBy="media")
+     * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="media")
      */
-    private $tricks;
+    private $trick;
 
     public function getId(): ?int {
         return $this->id;
@@ -62,12 +62,12 @@ class Media {
         return $this;
     }
 
-    public function getTricks(): ?Tricks {
-        return $this->tricks;
+    public function getTrick(): ?Trick {
+        return $this->trick;
     }
 
-    public function setTricks(?Tricks $tricks): self {
-        $this->tricks = $tricks;
+    public function setTrick(?Trick $trick): self {
+        $this->trick = $trick;
 
         return $this;
     }

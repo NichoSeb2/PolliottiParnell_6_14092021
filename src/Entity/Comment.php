@@ -35,10 +35,10 @@ class Comment {
     private $author;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Tricks::class, inversedBy="comments")
+     * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $tricks;
+    private $trick;
 
     /**
      * @ORM\Column(type="boolean")
@@ -69,12 +69,12 @@ class Comment {
         return $this;
     }
 
-    public function getTricks(): ?Tricks {
-        return $this->tricks;
+    public function getTrick(): ?Trick {
+        return $this->trick;
     }
 
-    public function setTricks(?Tricks $tricks): self {
-        $this->tricks = $tricks;
+    public function setTrick(?Trick $trick): self {
+        $this->trick = $trick;
 
         return $this;
     }
