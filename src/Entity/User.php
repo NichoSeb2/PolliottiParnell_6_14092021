@@ -75,9 +75,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
      */
     private $forgotPasswordToken = null;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Trick::class, mappedBy="contributors")
+     */
+    private $contributions;
+
     public function __construct() {
         $this->comments = new ArrayCollection();
         $this->tricks = new ArrayCollection();
+        $this->contributions = new ArrayCollection();
     }
 
     /**
@@ -244,6 +250,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
 
     public function setForgotPasswordToken(?string $forgotPasswordToken): self {
         $this->forgotPasswordToken = $forgotPasswordToken;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Trick[]
+     */
+    public function getContributions(): Collection {
+        return $this->contributions;
+    }
+
+    public function addContribution(Trick $contribution): self {
+        if (!$this->contributions->contains($contribution)) {
+            $this->contributions[] = $contribution;
+            $contribution->addContributor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContribution(Trick $contribution): self {
+        if ($this->contributions->removeElement($contribution)) {
+            $contribution->removeContributor($this);
+        }
 
         return $this;
     }

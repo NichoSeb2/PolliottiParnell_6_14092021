@@ -51,9 +51,21 @@ class Trick {
      */
     private $comments;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="tricks")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $category;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="contributions")
+     */
+    private $contributors;
+
     public function __construct() {
         $this->media = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->contributors = new ArrayCollection();
     }
 
     public function getId(): ?int {
@@ -140,6 +152,37 @@ class Trick {
                 $comment->setTrick(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getContributors(): Collection {
+        return $this->contributors;
+    }
+
+    public function addContributor(User $contributor): self {
+        if (!$this->contributors->contains($contributor)) {
+            $this->contributors[] = $contributor;
+        }
+
+        return $this;
+    }
+
+    public function removeContributor(User $contributor): self {
+        $this->contributors->removeElement($contributor);
 
         return $this;
     }
