@@ -3,21 +3,21 @@
 {% block title %}
 	{{ parent() }}
 	-
-	{{ tricks.name }}
+	{{ trick.name }}
 {% endblock %}
 
 {% block body %}
 	<article class="container bg-light border mb-5 p-0" style="margin-top: -90vh !important;">
 		<div class="position-relative d-flex flex-column justify-content-center align-content-between w-100 text-center bg-image bg-shade" data-controller="bgimage" bg-image-url="https://dummyimage.com/1920x1080/dee2e6/6c757d.jpg" min-height="500px">
 			<div class="col-lg-12">
-				<h1 class="text-white">{{ tricks.name }}</h1>
+				<h1 class="text-white">{{ trick.name }}</h1>
 
 				{% if app.user %}
 					<div class="position-absolute top-0 end-0">
 						<button type="submit" class="btn p-1 fs-6">
 							<i class="fas fa-pencil-alt"></i>
 						</button>
-						<button type="button" class="btn p-1 fs-6" data-bs-toggle="modal" data-bs-target="#tricksDeleteModal">
+						<button type="button" class="btn p-1 fs-6" data-bs-toggle="modal" data-bs-target="#trickDeleteModal">
 							<i class="fas fa-trash-alt"></i>
 						</button>
 					</div>
@@ -49,17 +49,17 @@
 		</div>
 		<div class="row justify-content-center align-content-between w-100 text-center">
 			<div class="col-lg-12">
-				<p class="text-justify px-2">{{ tricks.description }}</p>
+				<p class="text-justify px-2">{{ trick.description }}</p>
 			</div>
 		</div>
 		<hr class="h-2px w-80 mx-auto bg-primary">
 		<div class="row justify-content-center align-content-between w-100 text-center">
 			<div class="col-lg-12 d-flex flex-row flex-wrap justify-content-center">
-				<p class="text-nowrap">Date de création : <b>{{ tricks.createdAt|date("d/m/Y") }}</b></p>
+				<p class="text-nowrap">Date de création : <b>{{ trick.createdAt|date("d/m/Y") }}</b></p>
 				<i class="fas fa-circle text-primary mx-2" style="font-size: 19px;"></i>
-				<p class="text-nowrap">Catégorie : <b>{{ tricks.category }}</b></p>
+				<p class="text-nowrap">Catégorie : <b>{{ trick.category }}</b></p>
 				<i class="fas fa-circle text-primary mx-2" style="font-size: 19px;"></i>
-				<p class="text-nowrap">Date de modification : <b>{{ tricks.updatedAt|date("d/m/Y") }}</b></p>
+				<p class="text-nowrap">Date de modification : <b>{{ trick.updatedAt|date("d/m/Y") }}</b></p>
 			</div>
 		</div>
 		{% if app.user %}
@@ -89,5 +89,5 @@
 		</div>
 	</article>
 
-	{% include "parts/_tricks_delete_modal.html.twig" %}
+	{% include "parts/_trick_delete_modal.html.twig" %}
 {% endblock %}
