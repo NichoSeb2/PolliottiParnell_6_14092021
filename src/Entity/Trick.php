@@ -41,7 +41,7 @@ class Trick {
     private $description;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="trick")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="tricks")
      * @ORM\JoinColumn(nullable=false)
      */
     private $author;

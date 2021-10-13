@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\Collection;
@@ -84,6 +85,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
         $this->comments = new ArrayCollection();
         $this->tricks = new ArrayCollection();
         $this->contributions = new ArrayCollection();
+
+        $this->createdAt = new DateTime();
+        $this->updatedAt = new DateTime();
     }
 
     /**
