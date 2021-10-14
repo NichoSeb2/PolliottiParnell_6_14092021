@@ -3,9 +3,9 @@
 namespace App\Controller;
 
 use DateTime;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class TrickController extends AbstractController {
     #[Route('/trick/{slug}', name: 'app_trick')]

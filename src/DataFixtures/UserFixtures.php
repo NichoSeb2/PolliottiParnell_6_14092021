@@ -3,7 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\User;
-use DateTime;
+use Symfony\Component\Uid\Uuid;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -37,6 +37,7 @@ class UserFixtures extends Fixture{
 				$user,
 				'azerty'
 			))
+			->setVerificationToken(Uuid::v4())
 		;
 		$manager->persist($user);
 

@@ -11,7 +11,7 @@
 			class: 'w-100 h-100'
 		}) }}
 			<div class="bg-alpha p-2">
-				<h1 class="my-3">S'inscrire</h1>
+				<h2 class="my-3">S'inscrire</h2>
 
 				{{ form_row(form.username, {
 					attr: {
@@ -34,8 +34,12 @@
 				</div>
 
 				{% if success is defined %}
-                    <div class="alert alert-success">{{ success }}</div>
+                    <div class="alert alert-success">{{ success|nl2br }}</div>
                 {% endif %}
+
+				{% if error is defined %}
+					<div class="alert alert-danger">{{ error.message }}</div>
+				{% endif %}
 
 				<div class="form-group my-3">
 					<a href="{{ path('app_login') }}" class="link-secondary">Déjà membre ?</a>

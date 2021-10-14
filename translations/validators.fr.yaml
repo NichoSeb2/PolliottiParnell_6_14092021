@@ -1,0 +1,15 @@
+form:
+  register:
+    username:
+      not-blank: Veuillez entrer un nom d'utilisateur.
+    email:
+      not-blank: Veuillez entrer un e-mail.
+    password:
+      not-blank: Veuillez entrer un mot de passe.
+  verify:
+    resend:
+      success: Le nouveau mail de vérification a bien été envoyé.
+      email:
+        not-blank: Veuillez entrer un e-mail.
+        not-found: Aucun compte n'existe avec cette adresse e-mail.
+        already-verified: Le compte associé a cette adresse e-mail est déjà valider.

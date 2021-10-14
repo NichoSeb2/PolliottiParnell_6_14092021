@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{parent()}}
+	- Demander un nouveau mail de vérification
+{% endblock %}
+
+{% block body %}
+	<article class="container m-0 p-0 text-center translate-middle-y" style="margin-top: -50vh !important; max-height: 385px; max-width: 400px;">
+		{{ form_start(form, {
+			class: 'w-100 h-100'
+		}) }}
+			<div class="bg-alpha p-2">
+				<h2 class="my-3">Demander un nouveau mail de vérification</h2>
+
+				{{ form_row(form.email, {
+					attr: {
+						class: 'my-1'
+					}
+				}) }}
+
+				<div class="form-group my-3">
+					<button type="submit" class="btn btn-primary text-light">Demander un nouveau mail de vérification</button>
+				</div>
+
+				{% if success is defined %}
+                    <div class="alert alert-success">{{ success|nl2br }}</div>
+                {% endif %}
+
+				<div class="form-group my-3">
+					<a href="{{ path('app_login') }}" class="link-secondary">Votre compte est déjà validé ?</a>
+				</div>
+			</div>
+		{{ form_end(form) }}
+	</article>
+{% endblock %}

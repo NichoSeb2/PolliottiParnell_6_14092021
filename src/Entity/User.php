@@ -15,6 +15,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @UniqueEntity(fields={"username"}, message="Il existe déjà un compte avec ce nom d'utilisateur")
+ * @UniqueEntity(fields={"email"}, message="Il existe déjà un compte avec cette adresse email")
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface {
     /**
@@ -242,6 +243,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
         return $this->verificationToken;
     }
 
+    /**
+     * @param string|Uuid|null $verificationToken
+     * 
+     * @return self
+     */
     public function setVerificationToken(?string $verificationToken): self {
         $this->verificationToken = $verificationToken;
 
