@@ -14,13 +14,12 @@ class UserVerifiedChecker implements UserCheckerInterface {
         }
     }
 
-    public function checkPostAuth(UserInterface $user): void
-    {
+    public function checkPostAuth(UserInterface $user): void {
         if (!$user instanceof User) {
             return;
         }
 
-        // user account is expired, the user may be notified
+        // user account is not verified
         if (!$user->isVerified()) {
             throw new CustomUserMessageAccountStatusException("Votre compte n'est pas vérifier.");
         }

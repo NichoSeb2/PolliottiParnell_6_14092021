@@ -20,7 +20,9 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class SecurityController extends AbstractController {
-    #[Route('/login', name: 'app_login')]
+    /**
+     * @Route("/login", name="app_login", options={"expose"=true})
+     */
     public function login(AuthenticationUtils $authenticationUtils): Response {
         if ($this->getUser()) {
             return $this->redirectToRoute('app_home');
@@ -31,16 +33,23 @@ class SecurityController extends AbstractController {
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+        return $this->render('security/login.html.twig', [
+            'last_username' => $lastUsername,
+            'error' => $error,
+        ]);
     }
 
-    #[Route('/logout', name: 'app_logout')]
+    /**
+     * @Route("/logout", name="app_logout", options={"expose"=true})
+     */
     public function logout() {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 
-    #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $passwordEncoder, MailerInterface $mailer, VerificationMailGenerator $verificationMailGenerator): Response {
+    /**
+     * @Route("/register", name="app_register", options={"expose"=true})
+     */
+    public function register(Request $request, UserPasswordHasherInterface $passwordEncoder, MailerInterface $mailer, VerificationMailGenerator $verificationMailGenerator, TranslatorInterface $translator): Response {
         if ($this->getUser()) {
             return $this->redirectToRoute('app_home');
         }
@@ -75,7 +84,7 @@ class SecurityController extends AbstractController {
 
             return $this->render('security/register.html.twig', [
                 'form' => $form->createView(),
-                'success' => "Votre compte a bien été créé.\nUn mail de vérification vous a été envoyé.",
+                'success' => $translator->trans("form.register.success", [], "validators")
             ]);
         }
 
@@ -84,7 +93,9 @@ class SecurityController extends AbstractController {
         ]);
     }
 
-    #[Route('/verify/resend', name: 'app_verify_resend')]
+    /**
+     * @Route("/verify/resend", name="app_verify_resend", options={"expose"=true})
+     */
     public function resend(Request $request, MailerInterface $mailer, UserRepository $userRepository, TranslatorInterface $translator, VerificationMailGenerator $verificationMailGenerator): Response {
         if ($this->getUser()) {
             return $this->redirectToRoute('app_home');
@@ -121,8 +132,10 @@ class SecurityController extends AbstractController {
         ]);
     }
 
-    #[Route('/verify/{token}', name: 'app_verify')]
-    public function verify(string $token, UserRepository $userRepository, EntityManagerInterface $manager): Response {
+    /**
+     * @Route("/verify/{token}", name="app_verify", options={"expose"=true})
+     */
+    public function verify(string $token, UserRepository $userRepository, EntityManagerInterface $manager, TranslatorInterface $translator): Response {
         if ($this->getUser()) {
             return $this->redirectToRoute('app_home');
         }
@@ -130,22 +143,26 @@ class SecurityController extends AbstractController {
         $user = $userRepository->findOneBy(['verificationToken' => $token]);
 
         if (!is_null($user)) {
-            $user->setIsVerified(true);
-            $user->setVerificationToken(null);
+            $user
+                ->setIsVerified(true)
+                ->setVerificationToken(null)
+            ;
             $manager->persist($user);
             $manager->flush();
 
             return $this->render('security/verify.html.twig', [
-                'success' => "Votre compte a bien été vérifier.\nVous pouvez quitter cette page.", 
+                'success' => $translator->trans("form.verify.success", [], "validators")
             ]);
         }
 
         return $this->render('security/verify.html.twig', [
-            'error' => "Ce lien de vérification n'est pas valable.\n\nVotre compte est peut-être déjà valider, essayer de vous connecter.\n\nSi il ne l'est pas essayer de demander un nouveau lien.", 
+            'error' => true, 
         ]);
     }
 
-    #[Route('/reset_password/{token}', name: 'app_reset_password')]
+    /**
+     * @Route("/reset_password/{token}", name="app_reset_password", options={"expose"=true})
+     */
     public function reset_password(string $token): Response {
         if ($this->getUser()) {
             return $this->redirectToRoute('app_home');
@@ -156,7 +173,9 @@ class SecurityController extends AbstractController {
         ]);
     }
 
-    #[Route('/forgot_password', name: 'app_forgot_password')]
+    /**
+     * @Route("/forgot_password", name="app_forgot_password", options={"expose"=true})
+     */
     public function forgot_password(): Response {
         if ($this->getUser()) {
             return $this->redirectToRoute('app_home');

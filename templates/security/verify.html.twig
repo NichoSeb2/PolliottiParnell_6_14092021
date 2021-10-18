@@ -12,22 +12,24 @@
 				<h2 class="my-3">Vérification de compte</h2>
 
 				{% if success is defined %}
-					<div class="alert alert-success">{{ success|nl2br }}</div>
-
-					<div class="form-group my-3">
-						<a href="{{ path('app_home') }}" class="btn btn-primary text-light">Revenir a l'accueil</a>
+					<div class="alert alert-success">
+						{{ success|nl2br }}
+						<br><br>
+						<a href="{{ path('app_login') }}" class="link-success">Se connecter</a>
 					</div>
 				{% endif %}
 
 				{% if error is defined %}
-					<div class="alert alert-danger">{{ error|nl2br }}</div>
-
-					<div class="form-group my-3">
-						<a href="{{ path('app_login') }}" class="btn btn-primary text-light">Connexion</a>
-					</div>
-
-					<div class="form-group my-3">
-						<a href="{{ path('app_verify_resend') }}" class="link-secondary">Demander un nouveau lien</a>
+					<div class="alert alert-danger">
+						{{ "form.verify.errors.bad-token"|trans({}, 'validators')|nl2br }}
+						<br><br>
+						{{ "form.verify.errors.account-already-verified"|trans({}, 'validators')|nl2br }}
+						<br>
+						<a href="{{ path('app_login') }}" class="link-danger">Se connecter</a>
+						<br><br>
+						{{ "form.verify.errors.resend-link"|trans({}, 'validators')|nl2br }}
+						<br>
+						<a href="{{ path('app_verify_resend') }}" class="link-danger">Demander un nouveau lien</a>
 					</div>
 				{% endif %}
 			</div>

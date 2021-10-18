@@ -31,7 +31,7 @@ class Category {
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity=Trick::class, mappedBy="category", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Trick::class, mappedBy="category")
      */
     private $tricks;
 
