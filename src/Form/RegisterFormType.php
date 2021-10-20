@@ -4,38 +4,38 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 class RegisterFormType extends AbstractType {
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
             ->add('username', null, [
-                'label' => "Nom d'utilisateur", 
+                'label' => "form.register.username.label", 
                 'constraints' => [
                     new NotBlank([
-                        'message' => "Veuillez entrer un nom d'utilisateur", 
+                        'message' => "form.register.username.not-blank", 
                     ]), 
                 ], 
             ])
             ->add('email', null, [
-                'label' => "Adresse e-mail", 
+                'label' => "form.register.email.label", 
                 'constraints' => [
                     new NotBlank([
-                        'message' => "Veuillez entrer un e-mail", 
+                        'message' => "form.register.email.not-blank", 
                     ]), 
                 ], 
             ])
             ->add('plainPassword', PasswordType::class, [
-                'label' => "Mot de passe", 
+                'label' => "form.register.password.label", 
                 'mapped' => false, 
                 'attr' => ['autocomplete' => 'new-password'], 
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Veuillez entrer un mot de passe', 
+                        'message' => 'form.register.email.not-blank', 
                     ]), 
                     new Length([
                         // max length allowed by Symfony for security reasons

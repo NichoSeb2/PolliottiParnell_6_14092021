@@ -41,7 +41,7 @@ class Trick {
     private $description;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="trick")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="tricks")
      * @ORM\JoinColumn(nullable=false)
      */
     private $author;
@@ -61,6 +61,12 @@ class Trick {
      * @ORM\ManyToMany(targetEntity=User::class, inversedBy="contributions")
      */
     private $contributors;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Media::class, cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $coverImage;
 
     public function __construct() {
         $this->media = new ArrayCollection();
@@ -183,6 +189,16 @@ class Trick {
 
     public function removeContributor(User $contributor): self {
         $this->contributors->removeElement($contributor);
+
+        return $this;
+    }
+
+    public function getCoverImage(): ?Media {
+        return $this->coverImage;
+    }
+
+    public function setCoverImage(Media $coverImage): self {
+        $this->coverImage = $coverImage;
 
         return $this;
     }

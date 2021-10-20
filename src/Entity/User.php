@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\Collection;
@@ -14,6 +15,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @UniqueEntity(fields={"username"}, message="Il existe déjà un compte avec ce nom d'utilisateur")
+ * @UniqueEntity(fields={"email"}, message="Il existe déjà un compte avec cette adresse email")
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface {
     /**
@@ -84,6 +86,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
         $this->comments = new ArrayCollection();
         $this->tricks = new ArrayCollection();
         $this->contributions = new ArrayCollection();
+
+        $this->createdAt = new DateTime();
+        $this->updatedAt = new DateTime();
     }
 
     /**
@@ -238,6 +243,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface {
         return $this->verificationToken;
     }
 
+    /**
+     * @param string|Uuid|null $verificationToken
+     * 
+     * @return self
+     */
     public function setVerificationToken(?string $verificationToken): self {
         $this->verificationToken = $verificationToken;
 

@@ -1,0 +1,18 @@
+form:
+  register:
+    username:
+      label: "Nom d'utilisateur"
+    email:
+      label: "Adresse e-mail"
+    password:
+      label: "Mot de passe"
+  verify:
+    resend:
+      email:
+        label: "Adresse e-mail"
+  forgot-password: 
+    username:
+      label: "Nom d'utilisateur"
+  reset-password:
+    password:
+      label: "Mot de passe"

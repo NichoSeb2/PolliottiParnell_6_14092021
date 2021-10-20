@@ -3,12 +3,14 @@
 namespace App\Controller;
 
 use DateTime;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class TrickController extends AbstractController {
-    #[Route('/trick/{slug}', name: 'app_trick')]
+    /**
+     * @Route("/trick/{slug}", name="app_trick", options={"expose"=true})
+     */
     public function trick(string $slug): Response {
         return $this->render('trick/trick.html.twig', [
             'trick' => [

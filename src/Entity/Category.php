@@ -2,15 +2,22 @@
 
 namespace App\Entity;
 
-use App\Repository\CategoryRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\CategoryRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * @ORM\Entity(repositoryClass=CategoryRepository::class)
  */
 class Category {
+    /**
+     * Hook timestampable behavior
+     * updates createdAt, updatedAt fields
+     */
+    use TimestampableEntity;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -24,7 +31,7 @@ class Category {
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity=Trick::class, mappedBy="category", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Trick::class, mappedBy="category")
      */
     private $tricks;
 

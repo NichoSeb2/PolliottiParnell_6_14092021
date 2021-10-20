@@ -1,0 +1,31 @@
+form:
+  register:
+    success: "Votre compte a bien été créé.\nUn mail de vérification vous a été envoyé."
+    username:
+      not-blank: "Veuillez entrer un nom d'utilisateur."
+    email:
+      not-blank: "Veuillez entrer un e-mail."
+    password:
+      not-blank: "Veuillez entrer un mot de passe."
+  verify:
+    success: "Votre compte a bien été vérifier.\nVous pouvez quitter cette page."
+    errors:
+      bad-token: "Ce lien de vérification n'est pas valable."
+      account-already-verified: "Votre compte est peut-être déjà valider, essayer de vous connecter."
+      resend-link: "Si il ne l'est pas essayer de demander un nouveau lien."
+    resend:
+      success: "Le nouveau mail de vérification a bien été envoyé."
+      email:
+        not-blank: "Veuillez entrer un e-mail."
+        not-found: "Aucun compte n'existe avec cette adresse e-mail."
+        already-verified: "Le compte associé a cette adresse e-mail est déjà valider."
+  forgot-password: 
+    success: "Le mail de réinitialisation a bien été envoyé."
+    username:
+      not-blank: "Veuillez entrer un nom d'utilisateur."
+  reset-password: 
+    success: "Votre mot de passe a bien été mis à jour."
+    errors:
+      bad-token: "Ce lien de réinitialisation n'est pas valable.\nEssayer d'en demander un nouveau."
+    password:
+      not-blank: "Veuillez entrer un mot de passe."
