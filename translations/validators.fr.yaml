@@ -19,3 +19,13 @@ form:
         not-blank: "Veuillez entrer un e-mail."
         not-found: "Aucun compte n'existe avec cette adresse e-mail."
         already-verified: "Le compte associé a cette adresse e-mail est déjà valider."
+  forgot-password: 
+    success: "Le mail de réinitialisation a bien été envoyé."
+    username:
+      not-blank: "Veuillez entrer un nom d'utilisateur."
+  reset-password: 
+    success: "Votre mot de passe a bien été mis à jour."
+    errors:
+      bad-token: "Ce lien de réinitialisation n'est pas valable.\nEssayer d'en demander un nouveau."
+    password:
+      not-blank: "Veuillez entrer un mot de passe."

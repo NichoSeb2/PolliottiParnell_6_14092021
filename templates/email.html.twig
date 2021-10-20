@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+
+		<title>{% block title %}{% endblock %}</title>
+
+		{% include "emails/parts/_style.html.twig" %}
+	</head>
+	<body>
+		<header>
+			<h1>SnowTricks</h1>
+		</header>
+		<main>
+			<h1>{{ block('title') }}</h1>
+			<div class="container">
+				{% block email %}{% endblock %}
+			</div>
+		</main>
+		<footer>
+			<p>Copyright &copy; SnowTricks 2021</p>
+		</footer>
+	</body>
+</html>

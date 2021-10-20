@@ -7,9 +7,12 @@ use App\Form\RegisterFormType;
 use Symfony\Component\Uid\Uuid;
 use App\Form\VerifyResendFormType;
 use App\Repository\UserRepository;
+use App\Form\ResetPasswordFormType;
+use App\Form\ForgotPasswordFormType;
 use Symfony\Component\Form\FormError;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Service\VerificationMailGenerator;
+use App\Service\ForgotPasswordMailGenerator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -105,7 +108,7 @@ class SecurityController extends AbstractController {
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user = $userRepository->findOneBy(['email' => $form->getData()['email']]);
+            $user = $userRepository->findOneBy(['email' => $form->get('email')->getData()]);
 
             if (!is_null($user)) {
                 if (!$user->isVerified()) {
@@ -161,26 +164,92 @@ class SecurityController extends AbstractController {
     }
 
     /**
-     * @Route("/reset_password/{token}", name="app_reset_password", options={"expose"=true})
+     * @Route("/forgot_password", name="app_forgot_password", options={"expose"=true})
      */
-    public function reset_password(string $token): Response {
+    public function forgot_password(Request $request, MailerInterface $mailer, UserRepository $userRepository, EntityManagerInterface $manager, TranslatorInterface $translator, ForgotPasswordMailGenerator $forgotPasswordMailGenerator): Response {
         if ($this->getUser()) {
             return $this->redirectToRoute('app_home');
         }
 
-        return $this->render('security/reset_password.html.twig', [
-            'token' => $token, 
+        $form = $this->createForm(ForgotPasswordFormType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user = $userRepository->findOneBy(['username' => $form->get("username")->getData()]);
+
+            if (!is_null($user)) {
+                if (is_null($user->getForgotPasswordToken())) {
+                    $user->setForgotPasswordToken(Uuid::v4());
+                    $manager->persist($user);
+                    $manager->flush();
+                }
+
+                $resetPasswordLink = "http://". $_SERVER['HTTP_HOST']. $this->generateUrl("app_reset_password", [
+                    'token' => $user->getForgotPasswordToken(), 
+                ]);
+
+                $mailer->send($forgotPasswordMailGenerator->getForgotPasswordMail($user, $resetPasswordLink));
+
+                return $this->render('security/forgot_password.html.twig', [
+                    'form' => $form->createView(),
+                    'success' => $translator->trans("form.forgot-password.success", [], "validators")
+                ]);
+            } else {
+                $form->get("username")->addError(new FormError($translator->trans("form.forgot-password.username.not-found", [], "validators")));
+            }
+        }
+
+        return $this->render('security/forgot_password.html.twig', [
+            'form' => $form->createView(),
         ]);
     }
 
     /**
-     * @Route("/forgot_password", name="app_forgot_password", options={"expose"=true})
+     * @Route("/reset_password/{token}", name="app_reset_password", options={"expose"=true})
      */
-    public function forgot_password(): Response {
+    public function reset_password(string $token, Request $request, UserPasswordHasherInterface $passwordEncoder, UserRepository $userRepository, EntityManagerInterface $manager, TranslatorInterface $translator): Response {
         if ($this->getUser()) {
             return $this->redirectToRoute('app_home');
         }
 
-        return $this->render('security/forgot_password.html.twig', []);
+        $user = $userRepository->findOneBy(['forgotPasswordToken' => $token]);
+
+        $form = $this->createForm(ResetPasswordFormType::class);
+        $form->handleRequest($request);
+
+        if (!is_null($user)) {
+            if ($form->isSubmitted() && $form->isValid()) {
+                // encode the plain password
+                $user->setPassword(
+                    $passwordEncoder->hashPassword(
+                        $user,
+                        $form->get('plainPassword')->getData()
+                    )
+                );
+                $user->setForgotPasswordToken(null);
+
+                $manager->persist($user);
+                $manager->flush();
+
+                return $this->render('security/reset_password.html.twig', [
+                    'token' => $token,
+                    'form' => $form->createView(),
+                    'success' => $translator->trans("form.reset-password.success", [], "validators")
+                ]);
+            }
+        } else {
+            $form->addError(new FormError($translator->trans("form.reset-password.errors.bad-token", [], "validators")));
+
+            return $this->render('security/reset_password.html.twig', [
+                'token' => $token,
+                'form' => $form->createView(),
+                'error' => $form->getErrors()[0]
+            ]);
+        }
+
+        return $this->render('security/reset_password.html.twig', [
+            'token' => $token, 
+            'form' => $form->createView(),
+        ]);
     }
 }

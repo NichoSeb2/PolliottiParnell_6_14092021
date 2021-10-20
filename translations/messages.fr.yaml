@@ -10,3 +10,9 @@ form:
     resend:
       email:
         label: "Adresse e-mail"
+  forgot-password: 
+    username:
+      label: "Nom d'utilisateur"
+  reset-password:
+    password:
+      label: "Mot de passe"
