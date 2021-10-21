@@ -4,3 +4,8 @@ Cmd to dump route to json file
 ```shell
 php bin/console fos:js-routing:dump --format=json --target=public/js/fos_js_routes.json
 ```
+
+Cmd to load fixtures
+```shell
+php bin/console doctrine:fixtures:load --purger=purger
+```

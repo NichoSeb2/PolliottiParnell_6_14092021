@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\Collection;
@@ -37,6 +38,9 @@ class Category {
 
     public function __construct() {
         $this->tricks = new ArrayCollection();
+
+        $this->createdAt = new DateTime();
+        $this->updatedAt = new DateTime();
     }
 
     public function getId(): ?int {

@@ -1,4 +1,4 @@
-<a href="/trick/test"><img class="card-img-top w-100" src="https://dummyimage.com/1920x1080/dee2e6/6c757d.jpg"></a>
+<a href="/trick/{{ trick.slug }}"><img class="card-img-top w-100" src="{{ trick.coverImage.url }}" alt="{{ trick.coverImage.alt }}"></a>
 <div class="card-body p-1 d-flex flex-rox justify-content-between align-content-center">
 	<h5 class="card-title m-0 p-1">{{ trick.name }}</h5>
 

@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use DateTime;
+use App\Service\SlugConvertor;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\TrickRepository;
 use Doctrine\Common\Collections\Collection;
@@ -31,9 +33,9 @@ class Trick {
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity=Media::class, mappedBy="trick")
+     * @ORM\OneToMany(targetEntity=Media::class, mappedBy="trick", orphanRemoval=true)
      */
-    private $media;
+    private $medias;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -68,10 +70,21 @@ class Trick {
      */
     private $coverImage;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $slug;
+    private SlugConvertor $slugify;
+
     public function __construct() {
+        $this->slugify = new SlugConvertor();
+
         $this->media = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->contributors = new ArrayCollection();
+
+        $this->createdAt = new DateTime();
+        $this->updatedAt = new DateTime();
     }
 
     public function getId(): ?int {
@@ -91,13 +104,13 @@ class Trick {
     /**
      * @return Collection|Media[]
      */
-    public function getMedia(): Collection {
-        return $this->media;
+    public function getMedias(): Collection {
+        return $this->medias;
     }
 
     public function addMedia(Media $media): self {
-        if (!$this->media->contains($media)) {
-            $this->media[] = $media;
+        if (!$this->medias->contains($media)) {
+            $this->medias[] = $media;
             $media->setTrick($this);
         }
 
@@ -105,7 +118,7 @@ class Trick {
     }
 
     public function removeMedia(Media $media): self {
-        if ($this->media->removeElement($media)) {
+        if ($this->medias->removeElement($media)) {
             // set the owning side to null (unless already changed)
             if ($media->getTrick() === $this) {
                 $media->setTrick(null);
@@ -199,6 +212,22 @@ class Trick {
 
     public function setCoverImage(Media $coverImage): self {
         $this->coverImage = $coverImage;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string {
+        return $this->slug;
+    }
+
+    public function updateSlug(): self {
+        $this->setSlug($this->slugify->slugify($this->getName()));
+
+        return $this;
+    }
+
+    public function setSlug(string $slug): self {
+        $this->slug = $slug;
 
         return $this;
     }
