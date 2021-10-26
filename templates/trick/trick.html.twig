@@ -8,7 +8,7 @@
 
 {% block body %}
 	<article class="container bg-light mb-5 p-0" style="margin-top: -90vh !important;">
-		<div class="position-relative d-flex flex-column justify-content-center align-content-between w-100 text-center bg-image bg-shade" data-controller="bgimage" bg-image-url="{{ trick.coverImage.url }}" min-height="500px">
+		<div class="position-relative d-flex flex-column justify-content-center align-content-between w-100 text-center bg-image bg-shade" data-controller="bg-image" bg-image-url="{{ trick.coverImage.url }}" min-height="500px">
 			<div class="col-lg-12">
 				<h1 class="text-white">{{ trick.name }}</h1>
 
@@ -27,14 +27,14 @@
 		<div class="d-lg-flex d-none row w-100 text-center justify-content-center my-3" id="medias">
 			{% for media in trick.medias %}
 				{% if media.type == "image" %}
-					<div class="col-lg-3 p-1 d-flex flex-column justify-content-center overlay-play" data-bs-toggle="modal" data-controller="updatecontent" data-bs-target="#fullscreenMediaModal">
+					<div class="col-lg-3 p-1 d-flex flex-column justify-content-center overlay-play" data-bs-toggle="modal" data-controller="update-content" data-bs-target="#fullscreenMediaModal">
 						<img src="{{ media.url }}" alt="{{ media.alt }}" class="d-block w-100">
 						<div class="modal-container" title="{{ media.alt }}">
 							<img src="{{ media.url }}" alt="{{ media.alt }}" title="{{ media.alt }}" class="d-block w-100">
 						</div>
 					</div>
 				{% elseif media.type == "youtube" %}
-					<div class="col-lg-3 p-1 d-flex flex-column justify-content-center overlay-play" data-bs-toggle="modal" data-controller="updatecontent" data-bs-target="#fullscreenMediaModal">
+					<div class="col-lg-3 p-1 d-flex flex-column justify-content-center overlay-play" data-bs-toggle="modal" data-controller="update-content" data-bs-target="#fullscreenMediaModal">
 						<img src="{{ videoIdExtractor.getYoutubeThumbnail(videoIdExtractor.getYoutubeId(media.url)) }}" class="d-block w-100">
 						<i class="fas fa-play"></i>
 						<div class="modal-container" title="{{ videoIdExtractor.getYoutubeTitle(videoIdExtractor.getYoutubeId(media.url)) }}">
@@ -44,7 +44,7 @@
 						</div>
 					</div>
 				{% elseif media.type == "vimeo" %}
-					<div class="col-lg-3 p-1 d-flex flex-column justify-content-center overlay-play" data-bs-toggle="modal" data-controller="updatecontent" data-bs-target="#fullscreenMediaModal">
+					<div class="col-lg-3 p-1 d-flex flex-column justify-content-center overlay-play" data-bs-toggle="modal" data-controller="update-content" data-bs-target="#fullscreenMediaModal">
 						<img src="{{ videoIdExtractor.getVimeoThumbnail(videoIdExtractor.getVimeoId(media.url)) }}" class="d-block w-100">
 						<i class="fas fa-play"></i>
 						<div class="modal-container" title="{{ videoIdExtractor.getVimeoTitle(videoIdExtractor.getVimeoId(media.url)) }}">
