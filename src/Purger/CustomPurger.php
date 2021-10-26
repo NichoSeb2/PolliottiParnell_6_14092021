@@ -14,7 +14,7 @@ use Doctrine\Common\DataFixtures\Purger\ORMPurgerInterface;
 class CustomPurger implements ORMPurgerInterface {
 	private EntityManagerInterface $em;
 
-	private function getPurgeList(): array {
+	private function _getPurgeList(): array {
 		return [
 			(new ReflectionClass(Comment::class))->getName(), 
 			(new ReflectionClass(Trick::class))->getName(), 
@@ -40,7 +40,7 @@ class CustomPurger implements ORMPurgerInterface {
 		;
 
 		// Delete all table content
-		foreach ($this->getPurgeList() as $entity) {
+		foreach ($this->_getPurgeList() as $entity) {
 			$this->em
 				->createQuery("DELETE FROM ". $entity)
 				->execute()

@@ -27,6 +27,10 @@ class RegisterFormType extends AbstractType {
                     new NotBlank([
                         'message' => "form.register.email.not-blank", 
                     ]), 
+                    new Length([
+                        'max' => 191, 
+                        'maxMessage' => "form.register.email.too-long", 
+                    ]), 
                 ], 
             ])
             ->add('plainPassword', PasswordType::class, [

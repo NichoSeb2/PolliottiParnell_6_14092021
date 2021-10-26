@@ -33,7 +33,14 @@ class MediaFixtures extends Fixture implements OrderedFixtureInterface {
 
 		$media = new Media();
 		$media
-			->setUrl("https://youtu.be/axNnKy-jfWw")
+			->setUrl("https://www.youtube.com/watch?v=t705_V-RDcQ")
+			->setTrick($this->getReference(TrickFixtures::TRICK_TAIL_GRAB_REFERENCE))
+		;
+		$manager->persist($media);
+
+		$media = new Media();
+		$media
+			->setUrl("https://vimeo.com/groups/snowboarding/videos/630938580")
 			->setTrick($this->getReference(TrickFixtures::TRICK_TAIL_GRAB_REFERENCE))
 		;
 		$manager->persist($media);

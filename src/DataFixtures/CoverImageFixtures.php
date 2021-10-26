@@ -10,6 +10,8 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 class CoverImageFixtures extends Fixture implements OrderedFixtureInterface {
 	public const MEDIA_TAIL_GRAB_REFERENCE = "media-tail-grab";
 
+	public const MEDIA_NOSE_GRAB_REFERENCE = "media-nose-grab";
+
 	public function __construct() {}
 
 	public function getOrder() {
@@ -23,6 +25,14 @@ class CoverImageFixtures extends Fixture implements OrderedFixtureInterface {
 			->setAlt("Tail grab")
 		;
 		$this->addReference(self::MEDIA_TAIL_GRAB_REFERENCE, $media);
+		$manager->persist($media);
+
+		$media = new Media();
+		$media
+			->setUrl("/uploads/fixtures/tail_grab.jpg")
+			->setAlt("Tail grab")
+		;
+		$this->addReference(self::MEDIA_NOSE_GRAB_REFERENCE, $media);
 		$manager->persist($media);
 
 		$manager->flush();

@@ -5,6 +5,7 @@ form:
       not-blank: "Veuillez entrer un nom d'utilisateur."
     email:
       not-blank: "Veuillez entrer un e-mail."
+      too-long: "Votre e-mail est trop long."
     password:
       not-blank: "Veuillez entrer un mot de passe."
   verify:

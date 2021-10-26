@@ -7,6 +7,7 @@ use App\DataFixtures\UserFixtures;
 use App\DataFixtures\CategoryFixtures;
 use Doctrine\Persistence\ObjectManager;
 use App\DataFixtures\CoverImageFixtures;
+use App\Service\SlugConvertor;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
@@ -28,7 +29,7 @@ class TrickFixtures extends Fixture implements OrderedFixtureInterface {
 	}
 
 	public function load(ObjectManager $manager) {
-		$trick = new Trick();
+		$trick = new Trick(new SlugConvertor(), $manager);
 		$trick
 			->setName("Tail grab")
 			->updateSlug()
@@ -36,10 +37,23 @@ class TrickFixtures extends Fixture implements OrderedFixtureInterface {
 			->setAuthor($this->getReference(UserFixtures::ADMIN_REFERENCE))
 			->setCategory($this->getReference(CategoryFixtures::CATEGORY_GRABS_REFERENCE))
 			->setCoverImage($this->getReference(CoverImageFixtures::MEDIA_TAIL_GRAB_REFERENCE))
+			->addContributor($this->getReference(UserFixtures::ADMIN_REFERENCE))
+			->addContributor($this->getReference(UserFixtures::COMMENTATOR_REFERENCE))
 		;
 		$this->addReference(self::TRICK_TAIL_GRAB_REFERENCE, $trick);
 		$manager->persist($trick);
+		$manager->flush();
 
+		$trick = new Trick(new SlugConvertor(), $manager);
+		$trick
+			->setName("Tail grab")
+			->updateSlug()
+			->setDescription("Saisie de la partie arrière de la planche, avec la main arrière.")
+			->setAuthor($this->getReference(UserFixtures::ADMIN_REFERENCE))
+			->setCategory($this->getReference(CategoryFixtures::CATEGORY_GRABS_REFERENCE))
+			->setCoverImage($this->getReference(CoverImageFixtures::MEDIA_NOSE_GRAB_REFERENCE))
+		;
+		$manager->persist($trick);
 		$manager->flush();
 	}
 }

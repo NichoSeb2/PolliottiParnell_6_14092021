@@ -36,6 +36,29 @@
 	width: 80% !important;
 }
 
+.modal-fullscreen {
+	.modal-dialog {
+		max-width: none !important;
+		width: fit-content !important;
+
+		.modal-content {
+			border-radius: 0.3rem;
+		}
+
+		.modal-body {
+			img {
+				max-width: 90vw;
+				max-height: 90vh;
+			}
+
+			.video_wrapper {
+				width: 75vw;
+				// height: 80vh;
+			}
+		}
+	}
+}
+
 @each $breakpoint in map-keys($grid-breakpoints) {
 	@include media-breakpoint-up($breakpoint) {
 		$infix: breakpoint-infix($breakpoint, $grid-breakpoints);
