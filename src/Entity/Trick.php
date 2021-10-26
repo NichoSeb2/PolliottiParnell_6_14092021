@@ -2,14 +2,19 @@
 
 namespace App\Entity;
 
+use DateTime;
+use App\Service\SlugConvertor;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\TrickRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=TrickRepository::class)
+ * @UniqueEntity(fields={"slug"}, message="Il existe déjà un trick avec cette slug")
  */
 class Trick {
     /**
@@ -31,9 +36,9 @@ class Trick {
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity=Media::class, mappedBy="trick")
+     * @ORM\OneToMany(targetEntity=Media::class, mappedBy="trick", orphanRemoval=true)
      */
-    private $media;
+    private $medias;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -68,10 +73,18 @@ class Trick {
      */
     private $coverImage;
 
-    public function __construct() {
+    /**
+     * @ORM\Column(type="string", length=191, unique=true)
+     */
+    private $slug;
+
+    public function __construct(private SlugConvertor $slugify, private EntityManager $entityManager) {
         $this->media = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->contributors = new ArrayCollection();
+
+        $this->createdAt = new DateTime();
+        $this->updatedAt = new DateTime();
     }
 
     public function getId(): ?int {
@@ -91,13 +104,13 @@ class Trick {
     /**
      * @return Collection|Media[]
      */
-    public function getMedia(): Collection {
-        return $this->media;
+    public function getMedias(): Collection {
+        return $this->medias;
     }
 
     public function addMedia(Media $media): self {
-        if (!$this->media->contains($media)) {
-            $this->media[] = $media;
+        if (!$this->medias->contains($media)) {
+            $this->medias[] = $media;
             $media->setTrick($this);
         }
 
@@ -105,7 +118,7 @@ class Trick {
     }
 
     public function removeMedia(Media $media): self {
-        if ($this->media->removeElement($media)) {
+        if ($this->medias->removeElement($media)) {
             // set the owning side to null (unless already changed)
             if ($media->getTrick() === $this) {
                 $media->setTrick(null);
@@ -199,6 +212,33 @@ class Trick {
 
     public function setCoverImage(Media $coverImage): self {
         $this->coverImage = $coverImage;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string {
+        return $this->slug;
+    }
+
+    public function updateSlug(): self {
+        $trickRepository = $this->entityManager->getRepository(self::class);
+
+        $slug = $this->slugify->slugify($this->getName());
+
+        $slugDuplicator = 1;
+        while (!is_null($trickRepository->findOneBy(['slug' => $slug]))) {
+            $slug = $this->slugify->slugify($this->getName(). " ". $slugDuplicator);
+
+            $slugDuplicator++;
+        }
+
+        $this->setSlug($slug);
+
+        return $this;
+    }
+
+    public function setSlug(string $slug): self {
+        $this->slug = $slug;
 
         return $this;
     }

@@ -7,8 +7,8 @@
 {% endblock %}
 
 {% block body %}
-	<article class="container bg-light border mb-5 p-0" style="margin-top: -90vh !important;">
-		<div class="position-relative d-flex flex-column justify-content-center align-content-between w-100 text-center bg-image bg-shade" data-controller="bgimage" bg-image-url="https://dummyimage.com/1920x1080/dee2e6/6c757d.jpg" min-height="500px">
+	<article class="container bg-light mb-5 p-0" style="margin-top: -90vh !important;">
+		<div class="position-relative d-flex flex-column justify-content-center align-content-between w-100 text-center bg-image bg-shade" data-controller="bg-image" bg-image-url="{{ trick.coverImage.url }}" min-height="500px">
 			<div class="col-lg-12">
 				<h1 class="text-white">{{ trick.name }}</h1>
 
@@ -24,32 +24,49 @@
 				{% endif %}
 			</div>
 		</div>
-		<div class="d-sm-flex d-none row w-100 text-center my-3" id="medias">
-			{% for i in 1..8 %}
-				<div class="col-lg-3 p-1">
-					<img src="https://dummyimage.com/1920x1080/dee2e6/6c757d.jpg" alt="" class="w-100">
-					{# {% if i % 3 == 0 %}
-						<img src="https://dummyimage.com/1920x1080/dee2e6/6c757d.jpg" alt="" class="w-100">
-					{% elseif i % 3 == 1 %}
-						<div class="video_wrapper">
-							<iframe width="100%" height="100%" src="https://www.youtube.com/embed/axNnKy-jfWw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+		<div class="d-lg-flex d-none row w-100 text-center justify-content-center my-3" id="medias">
+			{% for media in trick.medias %}
+				{% if media.type == "image" %}
+					<div class="col-lg-3 p-1 d-flex flex-column justify-content-center overlay-play" data-bs-toggle="modal" data-controller="update-content" data-bs-target="#fullscreenMediaModal">
+						<img src="{{ media.url }}" alt="{{ media.alt }}" class="d-block w-100">
+						<div class="modal-container" title="{{ media.alt }}">
+							<img src="{{ media.url }}" alt="{{ media.alt }}" title="{{ media.alt }}" class="d-block w-100">
 						</div>
-					{% else %}
-						<div class="video_wrapper">
-							<iframe src="https://player.vimeo.com/video/59574563?h=8215b0763d" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+					</div>
+				{% elseif media.type == "youtube" %}
+					<div class="col-lg-3 p-1 d-flex flex-column justify-content-center overlay-play" data-bs-toggle="modal" data-controller="update-content" data-bs-target="#fullscreenMediaModal">
+						<img src="{{ videoIdExtractor.getYoutubeThumbnail(videoIdExtractor.getYoutubeId(media.url)) }}" class="d-block w-100">
+						<i class="fas fa-play"></i>
+						<div class="modal-container" title="{{ videoIdExtractor.getYoutubeTitle(videoIdExtractor.getYoutubeId(media.url)) }}">
+							<div class="video_wrapper">
+								<iframe width="100%" height="100%" src="https://www.youtube.com/embed/{{ videoIdExtractor.getYoutubeId(media.url) }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+							</div>
 						</div>
-					{% endif %} #}
-				</div>
+					</div>
+				{% elseif media.type == "vimeo" %}
+					<div class="col-lg-3 p-1 d-flex flex-column justify-content-center overlay-play" data-bs-toggle="modal" data-controller="update-content" data-bs-target="#fullscreenMediaModal">
+						<img src="{{ videoIdExtractor.getVimeoThumbnail(videoIdExtractor.getVimeoId(media.url)) }}" class="d-block w-100">
+						<i class="fas fa-play"></i>
+						<div class="modal-container" title="{{ videoIdExtractor.getVimeoTitle(videoIdExtractor.getVimeoId(media.url)) }}">
+							<div class="video_wrapper">
+								<iframe src="https://player.vimeo.com/video/{{ videoIdExtractor.getVimeoId(media.url) }}" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+							</div>
+						</div>
+					</div>
+				{% else %}
+				{% endif %}
+			{% else %}
+
 			{% endfor %}
 		</div>
-		<div class="d-sm-none d-flex row w-100 text-center my-3">
+		<div class="d-lg-none d-flex row w-100 text-center my-3">
 			<div class="col-lg-12">
 				<button type="button" class="btn btn-primary" data-controller="reveal" target="#medias">Voir les médias</button>
 			</div>
 		</div>
 		<div class="row justify-content-center align-content-between w-100 text-center">
 			<div class="col-lg-12">
-				<p class="text-justify px-2">{{ trick.description }}</p>
+				<p class="text-center px-2">Description : {{ trick.description }}</p>
 			</div>
 		</div>
 		<hr class="h-2px w-80 mx-auto bg-primary">
@@ -57,10 +74,23 @@
 			<div class="col-lg-12 d-flex flex-row flex-wrap justify-content-center">
 				<p class="text-nowrap">Date de création : <b>{{ trick.createdAt|date("d/m/Y") }}</b></p>
 				<i class="fas fa-circle text-primary mx-2" style="font-size: 19px;"></i>
-				<p class="text-nowrap">Catégorie : <b>{{ trick.category }}</b></p>
-				<i class="fas fa-circle text-primary mx-2" style="font-size: 19px;"></i>
-				<p class="text-nowrap">Date de modification : <b>{{ trick.updatedAt|date("d/m/Y") }}</b></p>
+				<p class="text-nowrap">Catégorie : <b>{{ trick.category.name }}</b></p>
+				{% if trick.createdAt != trick.updatedAt %}
+					<i class="fas fa-circle text-primary mx-2" style="font-size: 19px;"></i>
+					<p class="text-nowrap">Date de modification : <b>{{ trick.updatedAt|date("d/m/Y") }}</b></p>
+				{% endif %}
 			</div>
+			{% if trick.contributors|length != 0 %}
+				<div class="col-lg-12 d-flex flex-row flex-wrap justify-content-center">
+					<p class="text-nowrap">Contributeurs : 
+						{% for contributor in trick.contributors %}
+							<b>
+								{{ contributor.username }}{% if not loop.last %},{% endif %}
+							</b>
+						{% endfor %}
+					</p>
+				</div>
+			{% endif %}
 		</div>
 		{% if app.user %}
 			<hr class="h-2px w-80 mx-auto bg-primary">
@@ -72,22 +102,31 @@
 					<button type="submit" class="btn btn-primary text-nowrap text-light">Laissez un commentaire</button>
 				</div>
 			</form>
+		{% else %}
+			<hr class="h-2px w-80 mx-auto bg-primary">
+			<div class="row justify-content-center w-50 m-auto">
+				<p class="text-center">Vous ne pouvez pas laisser de commentaire si vous n'êtes pas connecté.</p>
+				<a href="{{ path('app_login') }}" class="btn btn-primary mt-3 mb-4 text-light">Se connecter</a>
+			</div>
 		{% endif %}
 		<hr class="h-2px w-80 mx-auto bg-primary">
-		<div class="row justify-content-center align-content-between w-100 text-center px-2">
-			{% for i in 1..8 %}
+		<div class="row justify-content-center align-content-between w-100 text-center px-2" id="commentsContainer">
+			{% for comment in trick.comments %}
 				<div class="col-lg-8 bg-white border mx-2 my-1 px-2 py-1 d-flex flex-row align-items-center">
-					<img src="https://i.pravatar.cc/128" alt="" width="64px" height="64px" class="rounded-circle">
-					<p class="px-2">Lorem, ipsum dolor sit amet consectetur adipisicing elit.</p>
+					<h6>{{ comment.author.username }}, {{ comment.createdAt|date("d/m/Y") }} : </h6>
+					<p class="px-2">{{ comment.content }}</p>
 				</div>
+			{% else %}
+				
 			{% endfor %}
 		</div>
 		<div class="row justify-content-center align-content-between w-100 text-center">
 			<div class="col-lg-2">
-				<button type="button" class="btn btn-secondary mt-3 mb-4">Load more</button>
+				<button type="button" class="btn btn-secondary mt-3 mb-4">Charger plus</button>
 			</div>
 		</div>
 	</article>
 
 	{% include "parts/_trick_delete_modal.html.twig" %}
+	{% include "parts/_fullscreen_media_modal.html.twig" %}
 {% endblock %}

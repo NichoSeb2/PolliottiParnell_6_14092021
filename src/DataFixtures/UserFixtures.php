@@ -6,13 +6,17 @@ use App\Entity\User;
 use Symfony\Component\Uid\Uuid;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class UserFixtures extends Fixture{
-	private $passwordHasher;
+class UserFixtures extends Fixture implements OrderedFixtureInterface {
+	public const ADMIN_REFERENCE = "admin";
+	public const COMMENTATOR_REFERENCE = "commentator";
 
-	public function __construct(UserPasswordHasherInterface $passwordHasher) {
-		$this->passwordHasher = $passwordHasher;
+	public function __construct(private UserPasswordHasherInterface $passwordHasher) {}
+
+	public function getOrder() {
+		return 1;
 	}
 
 	public function load(ObjectManager $manager) {
@@ -27,6 +31,7 @@ class UserFixtures extends Fixture{
 				'azerty'
 			))
 		;
+		$this->addReference(self::ADMIN_REFERENCE, $user);
 		$manager->persist($user);
 
 		$user = new User();
@@ -39,6 +44,7 @@ class UserFixtures extends Fixture{
 			))
 			->setVerificationToken(Uuid::v4())
 		;
+		$this->addReference(self::COMMENTATOR_REFERENCE, $user);
 		$manager->persist($user);
 
 		$manager->flush();

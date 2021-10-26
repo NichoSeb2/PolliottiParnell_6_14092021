@@ -22,11 +22,7 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator {
 
     public const LOGIN_ROUTE = 'app_login';
 
-    private UrlGeneratorInterface $urlGenerator;
-
-    public function __construct(UrlGeneratorInterface $urlGenerator) {
-        $this->urlGenerator = $urlGenerator;
-    }
+    public function __construct(private UrlGeneratorInterface $urlGenerator) {}
 
     public function supports(Request $request): bool {
         return $request->isMethod('POST') && $this->getLoginUrl($request) === $request->getPathInfo();

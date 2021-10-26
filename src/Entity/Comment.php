@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CommentRepository;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -44,6 +45,11 @@ class Comment {
      * @ORM\Column(type="boolean")
      */
     private $status = 0;
+
+    public function __construct() {
+        $this->createdAt = new DateTime();
+        $this->updatedAt = new DateTime();
+    }
 
     public function getId(): ?int {
         return $this->id;

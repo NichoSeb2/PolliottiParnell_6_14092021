@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\MediaRepository;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -34,9 +35,14 @@ class Media {
     private $alt;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="media")
+     * @ORM\ManyToOne(targetEntity=Trick::class, inversedBy="medias")
      */
     private $trick;
+
+    public function __construct() {
+        $this->createdAt = new DateTime();
+        $this->updatedAt = new DateTime();
+    }
 
     public function getId(): ?int {
         return $this->id;
@@ -70,5 +76,22 @@ class Media {
         $this->trick = $trick;
 
         return $this;
+    }
+
+    public function getType() {
+        $parse = parse_url($this->url);
+
+        if (isset($parse['host'])) {
+            if (preg_match("#youtu(?:be\.com|\.be)#", $parse['host'])) {
+                // youtube link
+                return "youtube";
+            } else if (preg_match("#vimeo(?:\.com)#", $parse['host'])) {
+                // vimeo link
+                return "vimeo";
+            }
+        } else {
+            // local image
+            return "image";
+        }
     }
 }
