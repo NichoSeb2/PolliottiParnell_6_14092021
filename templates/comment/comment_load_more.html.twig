@@ -1,0 +1,6 @@
+{% for comment in comments %}
+    <div class="col-lg-8 bg-white border mx-2 my-1 px-2 py-1 d-flex flex-row align-items-center">
+        <h6>{{ comment.author.username }}, {{ comment.createdAt|date("d/m/Y") }} : </h6>
+        <p class="px-2">{{ comment.content }}</p>
+    </div>
+{% endfor %}

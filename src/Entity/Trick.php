@@ -151,8 +151,18 @@ class Trick {
     /**
      * @return Collection|Comment[]
      */
-    public function getComments(): Collection {
+    public function getComments() {
         return $this->comments;
+    }
+
+    /**
+     * @param Collection|Comment[]
+     * 
+     */
+    public function setComments($comments): self {
+        $this->comments = $comments;
+
+        return $this;
     }
 
     public function addComment(Comment $comment): self {
