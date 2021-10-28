@@ -1,0 +1,5 @@
+{% for trick in tricks %}
+	<div class="col-lg-2 card m-2 p-0">
+		{% include "parts/_trick_card.html.twig" with { trick } %}
+	</div>
+{% endfor %}

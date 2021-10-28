@@ -46,12 +46,36 @@ class TrickFixtures extends Fixture implements OrderedFixtureInterface {
 
 		$trick = new Trick(new SlugConvertor(), $manager);
 		$trick
-			->setName("Tail grab")
+			->setName("Nose grab")
 			->updateSlug()
-			->setDescription("Saisie de la partie arrière de la planche, avec la main arrière.")
+			->setDescription("Saisie de la partie avant de la planche, avec la main avant.")
 			->setAuthor($this->getReference(UserFixtures::ADMIN_REFERENCE))
 			->setCategory($this->getReference(CategoryFixtures::CATEGORY_GRABS_REFERENCE))
 			->setCoverImage($this->getReference(CoverImageFixtures::MEDIA_NOSE_GRAB_REFERENCE))
+		;
+		$manager->persist($trick);
+		$manager->flush();
+
+		$trick = new Trick(new SlugConvertor(), $manager);
+		$trick
+			->setName("Truck driver")
+			->updateSlug()
+			->setDescription("Saisie du carre avant et carre arrière avec chaque main (comme tenir un volant de voiture).")
+			->setAuthor($this->getReference(UserFixtures::ADMIN_REFERENCE))
+			->setCategory($this->getReference(CategoryFixtures::CATEGORY_GRABS_REFERENCE))
+			->setCoverImage($this->getReference(CoverImageFixtures::MEDIA_TRUCK_DRIVER_REFERENCE))
+		;
+		$manager->persist($trick);
+		$manager->flush();
+
+		$trick = new Trick(new SlugConvertor(), $manager);
+		$trick
+			->setName("Indy")
+			->updateSlug()
+			->setDescription("Saisie de la carre frontside de la planche, entre les deux pieds, avec la main arrière.")
+			->setAuthor($this->getReference(UserFixtures::ADMIN_REFERENCE))
+			->setCategory($this->getReference(CategoryFixtures::CATEGORY_GRABS_REFERENCE))
+			->setCoverImage($this->getReference(CoverImageFixtures::MEDIA_INDY_REFERENCE))
 		;
 		$manager->persist($trick);
 		$manager->flush();

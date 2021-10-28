@@ -19,7 +19,23 @@ class CommentFixtures extends Fixture implements OrderedFixtureInterface {
 		$comment
 			->setAuthor($this->getReference(UserFixtures::COMMENTATOR_REFERENCE))
 			->setTrick($this->getReference(TrickFixtures::TRICK_TAIL_GRAB_REFERENCE))
-			->setContent("Ipsum duis non nulla aliquip excepteur ea excepteur quis Lorem laboris eu.")
+			->setContent("Ipsum duis non nulla aliquip excepteur ea excepteur quis Lorem laboris eu. 1")
+		;
+		$manager->persist($comment);
+
+		$comment = new Comment();
+		$comment
+			->setAuthor($this->getReference(UserFixtures::COMMENTATOR_REFERENCE))
+			->setTrick($this->getReference(TrickFixtures::TRICK_TAIL_GRAB_REFERENCE))
+			->setContent("Ipsum duis non nulla aliquip excepteur ea excepteur quis Lorem laboris eu. 2")
+		;
+		$manager->persist($comment);
+
+		$comment = new Comment();
+		$comment
+			->setAuthor($this->getReference(UserFixtures::COMMENTATOR_REFERENCE))
+			->setTrick($this->getReference(TrickFixtures::TRICK_TAIL_GRAB_REFERENCE))
+			->setContent("Ipsum duis non nulla aliquip excepteur ea excepteur quis Lorem laboris eu. 3")
 		;
 		$manager->persist($comment);
 
