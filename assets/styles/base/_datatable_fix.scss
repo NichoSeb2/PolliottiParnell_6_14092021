@@ -1,0 +1,7 @@
+.dataTables_wrapper {
+	.dataTables_filter input,
+	.dataTables_length select {
+		background-color: var(--bs-light) !important;
+		outline: none !important;
+	}
+}

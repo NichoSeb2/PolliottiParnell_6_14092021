@@ -17,7 +17,7 @@ class TrickController extends AbstractController {
      * @Route("/trick/{slug}", name="app_trick", options={"expose"=true})
      */
     public function trick(Trick $trick, CommentRepository $commentRepository): Response {
-        $comments = $commentRepository->findBy(['trick' => $trick], ['createdAt' => "DESC"], self::INITIAL_TRICKS_DISPLAYED);
+        $comments = $commentRepository->findBy(['trick' => $trick], ['createdAt' => "DESC"], CommentController::INITIAL_COMMENTS_DISPLAYED);
         $trick->setComments($comments);
 
         return $this->render('trick/trick.html.twig', [
