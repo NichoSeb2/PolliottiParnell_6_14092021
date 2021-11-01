@@ -32,8 +32,12 @@ class TrickController extends AbstractController {
     public function load_more(int $loaded, int $to_load, TrickRepository $trickRepository): Response {
         $tricks = $trickRepository->findBy([], ['createdAt' => "DESC"], $to_load, $loaded);
 
-        return $this->render('trick/trick_load_more.html.twig', [
+        $response = new Response($this->render('trick/trick_load_more.html.twig', [
             'tricks' => $tricks, 
-        ]);
+        ]));
+
+        $response->headers->set("Total-Element-Count", sizeof($trickRepository->findAll()));
+
+        return $response;
     }
 }

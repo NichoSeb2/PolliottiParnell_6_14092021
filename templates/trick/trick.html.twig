@@ -116,14 +116,18 @@
 					<p class="px-2">{{ comment.content }}</p>
 				</div>
 			{% else %}
-				
+				<div class="col-lg-8 mx-2 my-1 px-2 py-1 d-flex flex-row justify-content-center align-items-center">
+					<p class="px-2 text-center">Il n'y a pour l'instant aucun commentaire sur ce trick.</p>
+				</div>
 			{% endfor %}
 		</div>
-		<div class="row justify-content-center align-content-between w-100 text-center">
-			<div class="col-lg-2">
-				<button type="button" class="btn btn-secondary mt-3" data-controller="load-more" to-load="{{ ADDITIONAL_COMMENTS_DISPLAYED }}" route="app_comment_load_more" target="#commentsContainer">Charger plus</button>
+		{% if trick.comments|length != 0 %}
+			<div class="row justify-content-center align-content-between w-100 text-center">
+				<div class="col-lg-2">
+					<button type="button" class="btn btn-secondary mt-3" data-controller="load-more" to-load="{{ ADDITIONAL_COMMENTS_DISPLAYED }}" route="app_comment_load_more" target="#commentsContainer" parent-id="{{ trick.id }}">Charger plus</button>
+				</div>
 			</div>
-		</div>
+		{% endif %}
 	</article>
 
 	{% include "parts/_trick_delete_modal.html.twig" %}
