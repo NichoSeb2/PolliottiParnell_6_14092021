@@ -20,13 +20,13 @@ class CommentController extends AbstractController {
     public function load_more(int $loaded, int $to_load, int $parent_id, TrickRepository $trickRepository, CommentRepository $commentRepository): Response {
         $trick = $trickRepository->findOneBy(['id' => $parent_id]);
 
-        $comments = $commentRepository->findBy(['status' => true, 'trick' => $trick], ['createdAt' => "DESC"], $to_load, $loaded);
+        $comments = $commentRepository->findBy(['trick' => $trick, 'status' => true], ['createdAt' => "DESC"], $to_load, $loaded);
 
         $response = new Response($this->render('comment/comment_load_more.html.twig', [
             'comments' => $comments, 
         ]));
 
-        $response->headers->set("Total-Element-Count", sizeof($commentRepository->findBy(['trick' => $trick])));
+        $response->headers->set("Total-Element-Count", sizeof($commentRepository->findBy(['trick' => $trick, 'status' => true])));
 
         return $response;
     }

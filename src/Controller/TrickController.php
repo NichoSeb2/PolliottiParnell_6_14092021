@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Trick;
-use App\Repository\CommentRepository;
 use App\Repository\TrickRepository;
+use App\Repository\CommentRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

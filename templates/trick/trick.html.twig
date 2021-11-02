@@ -6,6 +6,28 @@
 	{{ trick.name }}
 {% endblock %}
 
+{% block stylesheets %}
+    {{parent()}}
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script>
+        $(document).ready(function(){
+			$('#medias').slick({
+				infinite: true,
+				draggable: false,
+				slidesToShow: 3,
+				slidesToScroll: 3,
+			});
+		});
+    </script>
+{% endblock %}
+
 {% block body %}
 	<article class="container bg-light mb-5 p-0 pb-3" style="margin-top: -90vh !important;">
 		<div class="position-relative d-flex flex-column justify-content-center align-content-between w-100 text-center bg-image bg-shade" data-controller="bg-image" bg-image-url="{{ trick.coverImage.url }}" min-height="500px">
@@ -24,18 +46,16 @@
 				{% endif %}
 			</div>
 		</div>
-		<div class="d-lg-flex d-none row w-100 text-center justify-content-center my-3" id="medias">
+		<div class="d-lg-flex d-none row w-100 text-center justify-content-center px-5 my-3" id="medias">
 			{% for media in trick.medias %}
 				{% if media.type == "image" %}
-					<div class="col-lg-3 p-1 d-flex flex-column justify-content-center overlay-play" data-bs-toggle="modal" data-controller="update-content" data-bs-target="#fullscreenMediaModal">
-						<img src="{{ media.url }}" alt="{{ media.alt }}" class="d-block w-100">
+					<div class="col-lg-3 m-1 d-flex flex-column justify-content-center overlay-play bg-image a-r-16-9" data-bs-toggle="modal" data-bs-target="#fullscreenMediaModal" data-controller="update-content bg-image" bg-image-url="{{ media.url }}">
 						<div class="modal-container" title="{{ media.alt }}">
-							<img src="{{ media.url }}" alt="{{ media.alt }}" title="{{ media.alt }}" class="d-block w-100">
+							<img src="{{ media.url }}" alt="{{ media.alt }}" title="{{ media.alt }}" class="d-block">
 						</div>
 					</div>
 				{% elseif media.type == "youtube" %}
-					<div class="col-lg-3 p-1 d-flex flex-column justify-content-center overlay-play" data-bs-toggle="modal" data-controller="update-content" data-bs-target="#fullscreenMediaModal">
-						<img src="{{ videoIdExtractor.getYoutubeThumbnail(videoIdExtractor.getYoutubeId(media.url)) }}" class="d-block w-100">
+					<div class="col-lg-3 m-1 d-flex flex-column justify-content-center overlay-play bg-image a-r-16-9" data-bs-toggle="modal" data-bs-target="#fullscreenMediaModal" data-controller="update-content bg-image" bg-image-url="{{ videoIdExtractor.getYoutubeThumbnail(videoIdExtractor.getYoutubeId(media.url)) }}">
 						<i class="fas fa-play"></i>
 						<div class="modal-container" title="{{ videoIdExtractor.getYoutubeTitle(videoIdExtractor.getYoutubeId(media.url)) }}">
 							<div class="video_wrapper">
@@ -44,8 +64,7 @@
 						</div>
 					</div>
 				{% elseif media.type == "vimeo" %}
-					<div class="col-lg-3 p-1 d-flex flex-column justify-content-center overlay-play" data-bs-toggle="modal" data-controller="update-content" data-bs-target="#fullscreenMediaModal">
-						<img src="{{ videoIdExtractor.getVimeoThumbnail(videoIdExtractor.getVimeoId(media.url)) }}" class="d-block w-100">
+					<div class="col-lg-3 m-1 d-flex flex-column justify-content-center overlay-play bg-image a-r-16-9" data-bs-toggle="modal" data-bs-target="#fullscreenMediaModal" data-controller="update-content bg-image" bg-image-url="{{ videoIdExtractor.getVimeoThumbnail(videoIdExtractor.getVimeoId(media.url)) }}">
 						<i class="fas fa-play"></i>
 						<div class="modal-container" title="{{ videoIdExtractor.getVimeoTitle(videoIdExtractor.getVimeoId(media.url)) }}">
 							<div class="video_wrapper">
@@ -53,7 +72,6 @@
 							</div>
 						</div>
 					</div>
-				{% else %}
 				{% endif %}
 			{% else %}
 
@@ -61,7 +79,7 @@
 		</div>
 		<div class="d-lg-none d-flex row w-100 text-center my-3">
 			<div class="col-lg-12">
-				<button type="button" class="btn btn-primary" data-controller="reveal" target="#medias">Voir les médias</button>
+				<button type="button" class="btn btn-primary text-light" data-controller="reveal" target="#medias">Voir les médias</button>
 			</div>
 		</div>
 		<div class="row justify-content-center align-content-between w-100 text-center">
@@ -112,7 +130,7 @@
 		<div class="row justify-content-center align-content-between w-100 text-center px-2" id="commentsContainer">
 			{% for comment in trick.comments %}
 				<div class="col-lg-8 bg-white border mx-2 my-1 px-2 py-1 d-flex flex-row align-items-center">
-					<h6>{{ comment.author.username }}, {{ comment.createdAt|date("d/m/Y") }} : </h6>
+					<h6 class="text-nowrap">{{ comment.author.username }}, {{ comment.createdAt|date("d/m/Y") }} : </h6>
 					<p class="px-2">{{ comment.content }}</p>
 				</div>
 			{% else %}
