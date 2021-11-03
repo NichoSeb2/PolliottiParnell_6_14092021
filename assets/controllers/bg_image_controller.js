@@ -7,8 +7,13 @@ export default class extends Controller {
 		if (container.hasClass("bg-image")) {
 			const url = container.attr("bg-image-url");
 			const minHeight = container.attr("min-height");
+			const target = container.attr("target");
 
-			container.css("background-image", `url(${url})`);
+			if (target != undefined) {
+				$(target).css("background-image", `url(${url})`);
+			} else {
+				container.css("background-image", `url(${url})`);
+			}
 
 			if (minHeight != undefined) {
 				container.css("min-height", minHeight);

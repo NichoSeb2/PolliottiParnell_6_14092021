@@ -21,27 +21,38 @@ export default class extends Controller {
             const route = button.attr("route");
             const loaded = $(button.attr("target") + " > div").length;
             const to_load = parseInt(button.attr("to-load"));
-            const link = Routing.generate(route, { loaded, to_load });
+            const parent_id = button.attr("parent-id");
+            let link;
+
+            if (parent_id != undefined) {
+                link = Routing.generate(route, { loaded, to_load, parent_id });
+            } else {
+                link = Routing.generate(route, { loaded, to_load });
+            }
 
             $.ajax({
                 url: link, 
                 type: 'GET', 
                 data: {}, 
-                success: (result) => {
-                    container.append(result);
+                success: (data, status, response) => {
+                    const max_element = parseInt(response.getResponseHeader("total-element-count"));
 
                     button.removeAttr("disabled");
                     button.html(initialBtnText);
 
-                    const elements = $.parseHTML(result).filter(e => {
-                        return e.data == undefined;
+                    const elements = $.parseHTML(data).filter(e => {
+                        return e.data === undefined;
                     });
 
-                    if (elements.length < to_load) {
+                    elements.forEach(element => {
+                        container.append(element);                        
+                    });
+
+                    if ((loaded + elements.length) >= max_element) {
                         button.remove();
                     }
                 }, 
-                error: (result, status, error) => {}, 
+                error: (response, status, error) => {}, 
             });
         });
     }

@@ -108,6 +108,15 @@ class Trick {
         return $this->medias;
     }
 
+    /**
+     * @param Collection|Media[]
+     */
+    public function setMedias($medias): self {
+        $this->medias = $medias;
+
+        return $this;
+    }
+
     public function addMedia(Media $media): self {
         if (!$this->medias->contains($media)) {
             $this->medias[] = $media;
@@ -157,7 +166,6 @@ class Trick {
 
     /**
      * @param Collection|Comment[]
-     * 
      */
     public function setComments($comments): self {
         $this->comments = $comments;

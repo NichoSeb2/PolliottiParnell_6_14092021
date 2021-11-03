@@ -38,24 +38,35 @@
 
 .modal-fullscreen {
 	.modal-dialog {
-		max-width: none !important;
+		max-height: 90vh;
+		max-width: 100vw !important;
 		width: fit-content !important;
 
 		.modal-content {
+			height: 100%;
+
 			border-radius: 0.3rem;
-		}
 
-		.modal-body {
-			img {
-				max-width: 90vw;
-				max-height: 90vh;
-			}
+			.modal-body {
+				width: fit-content !important;
 
-			.video_wrapper {
-				width: 75vw;
-				// height: 80vh;
+				img {
+					// height: 100%;
+					width: 100%;
+					width: 70vw;
+				}
+
+				.video_wrapper {
+					width: 70vw;
+				}
 			}
 		}
+	}
+}
+
+.table {
+	.even {
+		background-color: white;
 	}
 }
 

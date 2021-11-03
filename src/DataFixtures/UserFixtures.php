@@ -38,13 +38,25 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface {
 		$user
 			->setUsername("John")
 			->setEmail("john.doe@gmail.com")
+			->setIsVerified(true)
+			->setPassword($this->passwordHasher->hashPassword(
+				$user,
+				'azerty'
+			))
+		;
+		$this->addReference(self::COMMENTATOR_REFERENCE, $user);
+		$manager->persist($user);
+
+		$user = new User();
+		$user
+			->setUsername("Jane")
+			->setEmail("jane.doe@gmail.com")
 			->setPassword($this->passwordHasher->hashPassword(
 				$user,
 				'azerty'
 			))
 			->setVerificationToken(Uuid::v4())
 		;
-		$this->addReference(self::COMMENTATOR_REFERENCE, $user);
 		$manager->persist($user);
 
 		$manager->flush();

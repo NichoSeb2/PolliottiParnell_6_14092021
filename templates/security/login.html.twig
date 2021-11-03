@@ -10,6 +10,7 @@
 		<form method="post" class="w-100 h-100">
 			<div class="bg-alpha p-2">
 				<h2 class="my-3">Connexion</h2>
+				<input type="hidden" name="referer" value="{{app.request.headers.get('referer')}}"/>
 				<div class="form-group my-3">
 					<label for="username" class="fs-5">Nom d'utilisateur</label>
 					<input type="text" class="form-control my-1" id="username" name="username" autocomplete="username" required="" autofocus="" value="{{ last_username }}">

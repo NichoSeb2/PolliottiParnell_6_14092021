@@ -13,6 +13,11 @@
 					<a class="nav-link" href="{{ path('app_home') }}#top">Trick</a>
 				</li>
 				{% if app.user %}
+					{% if is_granted('ROLE_ADMIN') %}
+						<li class="nav-item">
+							<a class="nav-link" href="{{ path('app_admin_comment') }}">Admin</a>
+						</li>
+					{% endif %}
 					<li class="nav-item">
 						<a class="nav-link" href="{{ path('app_logout') }}">Se déconnecter</a>
 					</li>
