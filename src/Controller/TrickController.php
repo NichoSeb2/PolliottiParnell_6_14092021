@@ -3,10 +3,15 @@
 namespace App\Controller;
 
 use App\Entity\Trick;
+use App\Entity\Comment;
+use App\Form\CreateCommentFormType;
 use App\Repository\TrickRepository;
 use App\Repository\CommentRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class TrickController extends AbstractController {
@@ -16,13 +21,41 @@ class TrickController extends AbstractController {
     /**
      * @Route("/trick/{slug}", name="app_trick", options={"expose"=true})
      */
-    public function trick(Trick $trick, CommentRepository $commentRepository): Response {
+    public function trick(Request $request, Trick $trick, CommentRepository $commentRepository, EntityManagerInterface $entityManager, TranslatorInterface $translator): Response {
+        $user = $this->getUser();
+        $comment = new Comment();
+
+        $formCreateComment = $this->createForm(CreateCommentFormType::class, $comment);
+        $formCreateComment->handleRequest($request);
+
+        if ($formCreateComment->isSubmitted() && $formCreateComment->isValid()) {
+            $trick->addComment($comment);
+            $user->addComment($comment);
+
+            $entityManager->persist($comment);
+            $entityManager->persist($trick);
+            $entityManager->persist($user);
+
+            $entityManager->flush();
+
+            $comments = $commentRepository->findBy(['trick' => $trick], ['createdAt' => "DESC"], CommentController::INITIAL_COMMENTS_DISPLAYED);
+            $trick->setComments($comments);
+
+            return $this->render('trick/trick.html.twig', [
+                'ADDITIONAL_COMMENTS_DISPLAYED' => CommentController::ADDITIONAL_COMMENTS_DISPLAYED, 
+                'trick' => $trick, 
+                'formCreateComment' => $formCreateComment->createView(),
+                'createCommentSuccess' => $translator->trans("form.create-comment.success", [], "validators"),
+            ]);
+        }
+
         $comments = $commentRepository->findBy(['trick' => $trick], ['createdAt' => "DESC"], CommentController::INITIAL_COMMENTS_DISPLAYED);
         $trick->setComments($comments);
 
         return $this->render('trick/trick.html.twig', [
             'ADDITIONAL_COMMENTS_DISPLAYED' => CommentController::ADDITIONAL_COMMENTS_DISPLAYED, 
             'trick' => $trick, 
+            'formCreateComment' => $formCreateComment->createView(),
         ]);
     }
 
