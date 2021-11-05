@@ -51,7 +51,7 @@
                     <tr>
                         <td>{{ comment.author.username }}</td>
                         <td>{{ comment.content }}</td>
-                        <td>{{ comment.createdAt|date("d/m/Y H:m:s") }}</td>
+                        <td>{{ comment.createdAt|date("d/m/Y H:i:s") }}</td>
                         <td>
                             <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="statusSwitchComment-{{ comment.id }}" {{ comment.status ? "checked" }} data-controller="update-checkbox-label update-comment-status" off="Hors ligne" on="En ligne" comment-id="{{ comment.id }}">

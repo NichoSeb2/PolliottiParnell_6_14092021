@@ -30,3 +30,7 @@ form:
       bad-token: "Ce lien de réinitialisation n'est pas valable.\nEssayer d'en demander un nouveau."
     password:
       not-blank: "Veuillez entrer un mot de passe."
+  create-comment:
+    success: "Votre commentaire a bien été enregistré, il sera visible dès qu'il aura été validé."
+    content:
+      not-blank: "Le contenu de votre commentaire ne peut pas être vide."
