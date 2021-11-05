@@ -10,3 +10,15 @@
 .slick-next:before {
 	color: var(--bs-secondary) !important;
 }
+
+.slick-dots {
+    left: 0;
+
+    .slick-active {
+        button {
+            &::before {
+                color: var(--bs-primary) !important;
+            }
+        }
+    }
+}
