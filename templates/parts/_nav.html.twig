@@ -10,7 +10,7 @@
 					<a class="nav-link {{ app.request.get('_route') == 'app_home' ? 'active' : '' }}" href="{{ path('app_home') }}">Accueil</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="{{ path('app_home') }}#top">Trick</a>
+					<a class="nav-link {{ app.request.get('_route') == 'app_trick_create' ? 'active' : '' }}" href="{{ path('app_trick_create') }}">Créer un trick</a>
 				</li>
 				{% if app.user %}
 					{% if is_granted('ROLE_ADMIN') %}

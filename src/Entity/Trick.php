@@ -79,7 +79,7 @@ class Trick {
     private $slug;
 
     public function __construct(private SlugConvertor $slugify, private EntityManager $entityManager) {
-        $this->media = new ArrayCollection();
+        $this->medias = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->contributors = new ArrayCollection();
 

@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{ parent() }}
+	-
+	Création de trick
+{% endblock %}
+
+{# {% block stylesheets %}
+    {{parent()}}
+{% endblock %}
+
+{% block javascripts %}
+    {{parent()}}
+{% endblock %} #}
+
+{% block body %}
+	<article class="container m-0 p-0 text-center translate-middle-y" style="margin-top: -50vh !important; max-width: 750px;">
+		{{ form_start(formCreateTrick, {
+			class: 'w-100 h-100'
+		}) }}
+			<div class="bg-alpha p-2">
+				<h1 class="my-3">Création de trick</h1>
+
+				{{ form_row(formCreateTrick.name) }}
+				{{ form_row(formCreateTrick.description) }}
+				{{ form_row(formCreateTrick.category) }}
+				{{ form_row(formCreateTrick.coverImage) }}
+
+				<div class="form-group my-3">
+					<button type="submit" class="btn btn-primary text-light">Créer le trick</button>
+				</div>
+
+				{% if createTrickSuccess is defined %}
+                    <div class="alert alert-success">{{ createTrickSuccess|nl2br }}</div>
+                {% endif %}
+			</div>
+		{{ form_end(formCreateTrick) }}
+	</article>
+{% endblock %}

@@ -16,3 +16,12 @@ form:
   reset-password:
     password:
       label: "Mot de passe"
+  create-trick:
+    name:
+      label: "Nom"
+    description:
+      label: "Description"
+    category:
+      label: "Catégorie"
+    cover-image:
+      label: "Image de couverture"

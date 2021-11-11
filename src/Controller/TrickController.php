@@ -2,11 +2,17 @@
 
 namespace App\Controller;
 
+use App\Entity\Media;
 use App\Entity\Trick;
 use App\Entity\Comment;
+use App\Entity\User;
+use App\Service\SlugConvertor;
+use Symfony\Component\Uid\Uuid;
+use App\Form\CreateTrickFormType;
 use App\Form\CreateCommentFormType;
 use App\Repository\TrickRepository;
 use App\Repository\CommentRepository;
+use Symfony\Component\Form\FormError;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,9 +25,68 @@ class TrickController extends AbstractController {
     public const ADDITIONAL_TRICKS_DISPLAYED = 2;
 
     /**
+     * @Route("/trick/create", name="app_trick_create", options={"expose"=true})
+     */
+    public function create(Request $request, SlugConvertor $slugConvertor, EntityManagerInterface $entityManager, TranslatorInterface $translator): Response {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $trick = new Trick($slugConvertor, $entityManager);
+
+        $formCreateTrick = $this->createForm(CreateTrickFormType::class, $trick);
+        $formCreateTrick->handleRequest($request);
+
+        if ($formCreateTrick->isSubmitted() && $formCreateTrick->isValid()) {
+            $coverImage = $formCreateTrick->get("coverImage")->getData();
+
+            if (str_starts_with($coverImage->getClientMimeType(), "image/")) {
+                $coverImageExtension = $coverImage->guessExtension();
+
+                // extension cannot be guessed
+                if (!$coverImageExtension) {
+                    $coverImageExtension = 'bin';
+                }
+
+                $coverImageTargetFileName = Uuid::v4(). '.'. $coverImageExtension;
+                $coverImage->move(Media::UPLOAD_DIR, $coverImageTargetFileName);
+                $coverImageTargetPath = str_replace("./", "", Media::UPLOAD_DIR). $coverImageTargetFileName;
+
+                $coverImage = (new Media())
+                    ->setUrl($coverImageTargetPath)
+                    ->setAlt($trick->getName())
+                ;
+
+                $trick
+                    ->setAuthor($user)
+                    ->setCoverImage($coverImage)
+                    ->updateSlug()
+                ;
+
+                // $entityManager->persist($user);
+                $entityManager->persist($coverImage);
+                $entityManager->persist($trick);
+
+                $entityManager->flush();
+
+                return $this->render('trick/trick_create.html.twig', [
+                    'formCreateTrick' => $formCreateTrick->createView(),
+                    'createTrickSuccess' => $translator->trans("form.create-trick.success", [], "validators"),
+                ]);
+            } else {
+                $formCreateTrick->get("coverImage")->addError(new FormError($translator->trans("form.create-trick.coverImage.wrong-mime-type", [], "validators")));
+            }
+        }
+
+        return $this->render('trick/trick_create.html.twig', [
+            'formCreateTrick' => $formCreateTrick->createView(),
+        ]);
+    }
+
+    /**
      * @Route("/trick/{slug}", name="app_trick", options={"expose"=true})
      */
     public function trick(Request $request, Trick $trick, CommentRepository $commentRepository, EntityManagerInterface $entityManager, TranslatorInterface $translator): Response {
+        /** @var User $user */
         $user = $this->getUser();
         $comment = new Comment();
 
