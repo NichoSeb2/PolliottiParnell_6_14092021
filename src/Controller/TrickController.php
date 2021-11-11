@@ -114,7 +114,7 @@ class TrickController extends AbstractController {
             ]);
         }
 
-        $comments = $commentRepository->findBy(['trick' => $trick], ['createdAt' => "DESC"], CommentController::INITIAL_COMMENTS_DISPLAYED);
+        $comments = $commentRepository->findBy(['trick' => $trick, 'status' => true], ['createdAt' => "DESC"], CommentController::INITIAL_COMMENTS_DISPLAYED);
         $trick->setComments($comments);
 
         return $this->render('trick/trick.html.twig', [
