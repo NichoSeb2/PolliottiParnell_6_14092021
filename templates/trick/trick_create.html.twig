@@ -16,25 +16,25 @@
 
 {% block body %}
 	<article class="container m-0 p-0 text-center translate-middle-y" style="margin-top: -50vh !important; max-width: 750px;">
-		{{ form_start(formCreateTrick, {
+		{{ form_start(formTrick, {
 			class: 'w-100 h-100'
 		}) }}
 			<div class="bg-alpha p-2">
 				<h1 class="my-3">Création de trick</h1>
 
-				{{ form_row(formCreateTrick.name) }}
-				{{ form_row(formCreateTrick.description) }}
-				{{ form_row(formCreateTrick.category) }}
-				{{ form_row(formCreateTrick.coverImage) }}
+				{{ form_row(formTrick.name) }}
+				{{ form_row(formTrick.description) }}
+				{{ form_row(formTrick.category) }}
+				{{ form_row(formTrick.coverImage) }}
 
 				<div class="form-group my-3">
 					<button type="submit" class="btn btn-primary text-light">Créer le trick</button>
 				</div>
 
-				{% if createTrickSuccess is defined %}
-                    <div class="alert alert-success">{{ createTrickSuccess|nl2br }}</div>
+				{% if trickSuccess is defined %}
+                    <div class="alert alert-success">{{ trickSuccess|nl2br }}</div>
                 {% endif %}
 			</div>
-		{{ form_end(formCreateTrick) }}
+		{{ form_end(formTrick) }}
 	</article>
 {% endblock %}
