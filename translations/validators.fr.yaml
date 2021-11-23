@@ -34,11 +34,12 @@ form:
     success: "Votre commentaire a bien été enregistré, il sera visible dès qu'il aura été validé."
     content:
       not-blank: "Le contenu de votre commentaire ne peut pas être vide."
-  create-trick:
-    success: "Le trick a bien été créé."
+  trick:
     name:
       not-blank: "Veuillez entrer un nom."
     description:
       not-blank: "Veuillez entrer une description."
     category:
       not-blank: "Veuillez sélectionner une catégorie."
+  create-trick:
+    success: "Le trick a bien été créé."

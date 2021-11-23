@@ -17,14 +17,18 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
     <script>
-        $(document).ready(function(){
-			$('#medias').slick({
-				infinite: true,
-				dots: true,
-				draggable: false,
-				slidesToShow: 3,
-				slidesToScroll: 1,
-			});
+        $(document).ready(() => {
+			const mediasContainer = $("#medias");
+
+			if (mediasContainer.attr("nb-media") != 0) {
+				mediasContainer.slick({
+					infinite: true,
+					dots: true,
+					draggable: false,
+					slidesToShow: 3,
+					slidesToScroll: 1,
+				});
+			}
 		});
     </script>
 {% endblock %}
@@ -47,7 +51,7 @@
 				{% endif %}
 			</div>
 		</div>
-		<div class="d-lg-flex d-none row w-100 text-center justify-content-center px-5 my-3" id="medias">
+		<div class="d-lg-flex d-none row w-100 text-center justify-content-center px-5 my-3" id="medias" nb-media="{{ trick.medias|length }}">
 			{% for media in trick.medias %}
 				{% if media.type == "image" %}
 					<div class="col-lg-3 m-1 d-flex flex-column justify-content-center overlay-play bg-image a-r-16-9" data-bs-toggle="modal" data-bs-target="#fullscreenMediaModal" data-controller="update-content bg-image" bg-image-url="{{ media.url }}">
@@ -75,6 +79,7 @@
 					</div>
 				{% endif %}
 			{% else %}
+				<p>Ce trick n'a pas encore de média.</p>
 			{% endfor %}
 		</div>
 		<div class="d-lg-none d-flex row w-100 text-center my-3">

@@ -7,8 +7,8 @@ use App\Entity\Media;
 use App\Entity\Trick;
 use App\Entity\Comment;
 use App\Form\TrickFormType;
+use App\Service\ImageUploader;
 use App\Service\SlugConvertor;
-use Symfony\Component\Uid\Uuid;
 use App\Form\CreateCommentFormType;
 use App\Repository\TrickRepository;
 use App\Repository\CommentRepository;
@@ -28,42 +28,53 @@ class TrickController extends AbstractController {
     /**
      * @Route("/trick/create", name="app_trick_create", options={"expose"=true})
      */
-    public function create(Request $request, SlugConvertor $slugConvertor, EntityManagerInterface $entityManager, TranslatorInterface $translator): Response {
+    public function create(Request $request, SlugConvertor $slugConvertor, EntityManagerInterface $entityManager, TranslatorInterface $translator, ImageUploader $imageUploader): Response {
         /** @var User $user */
         $user = $this->getUser();
 
         $trick = new Trick($slugConvertor, $entityManager);
 
-        $formTrick = $this->createForm(TrickFormType::class, $trick);
+        $formTrick = $this->createForm(TrickFormType::class, $trick, ['new' => true]);
         $formTrick->handleRequest($request);
 
         if ($formTrick->isSubmitted() && $formTrick->isValid()) {
-            $coverImage = $formTrick->get("coverImage")->getData();
+            $coverImageFile = $formTrick->get("coverImage")->get("file")->getData();
 
-            if (str_starts_with($coverImage->getClientMimeType(), "image/")) {
-                $coverImageExtension = $coverImage->guessExtension();
+            if ($imageUploader->isValidImage($coverImageFile, Media::ACCEPT_MIME_TYPE)) {
+                $trick->getCoverImage()->setUrl($imageUploader->uploadFile($coverImageFile, Media::UPLOAD_DIR));
 
-                // extension cannot be guessed
-                if (!$coverImageExtension) {
-                    $coverImageExtension = 'bin';
+                foreach ($formTrick->get("medias") as $index => $mediaData) {
+                    /** @var Media $media */
+                    $media = $mediaData->getData();
+                    $media->setTrick($trick);
+
+                    switch ($mediaData->get("type")->getData()) {
+                        case Media::MEDIA_TYPE_LOCAL_FILE:
+                            $mediaFile = $mediaData->get("file")->getData();
+                            $media
+                                ->setUrl($imageUploader->uploadFile($mediaFile, Media::UPLOAD_DIR))
+                                ->setAlt($mediaData->get("alt")->getData())
+                            ;
+                            break;
+                        case Media::MEDIA_TYPE_URL:
+                            $media->setUrl($mediaData->get("url")->getData());
+                            break;
+                        default:
+                            break;
+                    }
                 }
-
-                $coverImageTargetFileName = Uuid::v4(). '.'. $coverImageExtension;
-                $coverImage->move(Media::UPLOAD_DIR, $coverImageTargetFileName);
-                $coverImageTargetPath = str_replace("./", "/", Media::UPLOAD_DIR). $coverImageTargetFileName;
-
-                $coverImage = (new Media())
-                    ->setUrl($coverImageTargetPath)
-                    ->setAlt($trick->getName())
-                ;
 
                 $trick
                     ->setAuthor($user)
-                    ->setCoverImage($coverImage)
                     ->updateSlug()
                 ;
 
-                $entityManager->persist($coverImage);
+                foreach ($trick->getMedias() as $media) {
+                    /** @var Media $media */
+                    $entityManager->persist($media);
+                }
+
+                $entityManager->persist($trick->getCoverImage());
                 $entityManager->persist($trick);
 
                 $entityManager->flush();
@@ -73,7 +84,7 @@ class TrickController extends AbstractController {
                     'trickSuccess' => $translator->trans("form.create-trick.success", [], "validators"),
                 ]);
             } else {
-                $formTrick->get("coverImage")->addError(new FormError($translator->trans("form.create-trick.coverImage.wrong-mime-type", [], "validators")));
+                $formTrick->get("coverImage")->addError(new FormError($translator->trans("form.trick.cover-image.wrong-mime-type", [], "validators")));
             }
         }
 

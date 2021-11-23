@@ -16,7 +16,7 @@ form:
   reset-password:
     password:
       label: "Mot de passe"
-  create-trick:
+  trick:
     name:
       label: "Nom"
     description:
@@ -25,3 +25,5 @@ form:
       label: "Catégorie"
     cover-image:
       label: "Image de couverture"
+    medias:
+      label: "Médias du trick"
