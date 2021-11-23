@@ -24,15 +24,16 @@ class MediaType extends AbstractType {
                 $media = $event->getData();
                 $form = $event->getForm();
                 $config = $form->getConfig();
+                $options = $config->getOptions();
 
-                if ($config->getOption('coverImage')) {
+                if ($options['coverImage']) {
                     $form
                         ->add('file', FileType::class, [
                             'label' => "form.trick.cover-image.label",
                             'attr' => [
                                 'accept' => Media::ACCEPT_MIME_TYPE
                             ],
-                            'required' => false,
+                            'required' => $options['new'],
                             'mapped' => false,
                             'constraints' => [
                                 new File([
@@ -83,6 +84,7 @@ class MediaType extends AbstractType {
                             'attr' => [
                                 'accept' => Media::ACCEPT_MIME_TYPE,
                                 'file' => true,
+                                'dynamicRequire' => true,
                             ],
                             'required' => false,
                             'mapped' => false,
@@ -104,6 +106,7 @@ class MediaType extends AbstractType {
                             'label' => "form.trick.media.file.alt.label",
                             'attr' => [
                                 'file' => true,
+                                'dynamicRequire' => true,
                             ],
                             'required' => false,
                             'mapped' => false,
@@ -118,6 +121,7 @@ class MediaType extends AbstractType {
                             'label' => 'form.trick.media.url.label',
                             'attr' => [
                                 'url' => true,
+                                'dynamicRequire' => true,
                             ],
                             'trim' => true,
                             'required' => false,

@@ -17,6 +17,7 @@ class TrickFormType extends AbstractType {
         $builder
             ->add('name', null, [
                 'label' => "form.trick.name.label", 
+                'required' => true, 
                 'constraints' => [
                     new NotBlank([
                         'message' => "form.trick.name.not-blank", 
@@ -25,6 +26,7 @@ class TrickFormType extends AbstractType {
             ])
             ->add('description', null, [
                 'label' => "form.trick.description.label", 
+                'required' => true, 
                 'constraints' => [
                     new NotBlank([
                         'message' => "form.trick.description.not-blank", 
@@ -33,6 +35,7 @@ class TrickFormType extends AbstractType {
             ])
             ->add('category', EntityType::class, [
                 'label' => "form.trick.category.label", 
+                'required' => true, 
                 'constraints' => [
                     new NotBlank([
                         'message' => "form.trick.category.not-blank", 
