@@ -41,7 +41,10 @@ class TrickController extends AbstractController {
             $coverImageFile = $formTrick->get("coverImage")->get("file")->getData();
 
             if ($imageUploader->isValidImage($coverImageFile, Media::ACCEPT_MIME_TYPE)) {
-                $trick->getCoverImage()->setUrl($imageUploader->uploadFile($coverImageFile, Media::UPLOAD_DIR));
+                $trick->getCoverImage()
+                    ->setUrl($imageUploader->uploadFile($coverImageFile, Media::UPLOAD_DIR))
+                    ->setAlt($formTrick->get("coverImage")->get("alt")->getData())
+                ;
 
                 foreach ($formTrick->get("medias") as $index => $mediaData) {
                     /** @var Media $media */

@@ -41,5 +41,22 @@ form:
       not-blank: "Veuillez entrer une description."
     category:
       not-blank: "Veuillez sélectionner une catégorie."
+    cover-image: 
+      wrong-mime-type: "Mauvais type d'image téléversé."
+      not-blank: "Veuillez téléverser une image."
+      alt:
+        not-blank: "Veuillez entrer une description pour l'image téléversée."
+    medias:
+      type:
+        not-blank: "Veuillez sélectionner le type du média."
+      file:
+        wrong-mime-type: "Mauvais type d'image téléversé."
+        not-blank: "Veuillez téléverser une image."
+        alt:
+          not-blank: "Veuillez entrer une description pour l'image téléversée."
+      url:
+        wrong-url-format: "Veuillez entrer l'url d'une vidéo YouTube ou Viméo."
+        not-url: "Veuillez entrer un url."
+        not-blank: "Veuillez entrer un url."
   create-trick:
     success: "Le trick a bien été créé."
