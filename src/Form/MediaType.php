@@ -28,9 +28,13 @@ class MediaType extends AbstractType {
                 $config = $form->getConfig();
                 $options = $config->getOptions();
 
+                $fileAttr = [];
+                $fileAltAttr = [];
+
                 if (!$options['coverImage']) {
                     $form
                         ->add('type', ChoiceType::class, [
+                            'priority' => 3,
                             'label' => 'form.trick.medias.type.label',
                             'attr' => [
                                 'data-controller' => "media-type-switch media-label-fix",
@@ -50,115 +54,8 @@ class MediaType extends AbstractType {
                                 ])
                             ]
                         ])
-                    ;
-                }
-
-                if ($options['coverImage']) {
-                    $fileOptions = [
-                        'label' => "form.trick.cover-image.label",
-                        'attr' => [
-                            'accept' => Media::ACCEPT_MIME_TYPE,
-                        ],
-                        'required' => $options['new'],
-                        'mapped' => false,
-                        'constraints' => [
-                            'file' => [
-                                'message' => "form.trick.cover-image.wrong-mime-type",
-                                'groups' => ['Default']
-                            ],
-                            'not-blank' => [
-                                'message' => "form.trick.cover-image.not-blank",
-                                'groups' => ['Default']
-                            ],
-                        ],
-                        'alt' => [
-                            'label' => "form.trick.cover-image.alt.label",
-                            'attr' => [],
-                            'required' => true,
-                            'mapped' => false,
-                            'constraints' => [
-                                'not-blank' => [
-                                    'message' => "form.trick.cover-image.alt.not-blank",
-                                    'groups' => ['Default']
-                                ],
-                            ],
-                        ],
-                    ];
-                } else {
-                    $fileOptions = [
-                        'label' => "form.trick.medias.file.label",
-                        'attr' => [
-                            'accept' => Media::ACCEPT_MIME_TYPE,
-                                'file' => true,
-                                'dynamicRequire' => true,
-                        ],
-                        'required' => false,
-                        'mapped' => false,
-                        'constraints' => [
-                            'file' => [
-                                'message' => "form.trick.medias.file.wrong-mime-type",
-                                'groups' => ['image']
-                            ],
-                            'not-blank' => [
-                                'message' => "form.trick.medias.file.not-blank",
-                                'groups' => ['image']
-                            ],
-                        ],
-                        'alt' => [
-                            'label' => "form.trick.medias.file.alt.label",
-                            'attr' => [
-                                'file' => true,
-                                'dynamicRequire' => true,
-                            ],
-                            'required' => false,
-                            'mapped' => false,
-                            'constraints' => [
-                                'not-blank' => [
-                                    'message' => "form.trick.medias.file.alt.not-blank",
-                                    'groups' => ['image']
-                                ],
-                            ],
-                        ],
-                    ];
-                }
-
-                $form
-                    ->add('file', FileType::class, [
-                        'label' => $fileOptions['label'],
-                        'attr' => $fileOptions['attr'],
-                        'required' => $fileOptions['required'],
-                        'mapped' => $fileOptions['mapped'],
-                        'constraints' => [
-                            new File([
-                                'mimeTypes' => [
-                                    Media::ACCEPT_MIME_TYPE,
-                                ],
-                                'mimeTypesMessage' => $fileOptions['constraints']['file']['message'],
-                                'groups' => $fileOptions['constraints']['file']['groups'],
-                            ]),
-                            new NotBlank([
-                                'message' => $fileOptions['constraints']['not-blank']['message'],
-                                'groups' => $fileOptions['constraints']['not-blank']['groups'],
-                            ])
-                        ]
-                    ])
-                    ->add('alt', null, [
-                        'label' => $fileOptions['alt']['label'],
-                        'attr' => $fileOptions['alt']['attr'],
-                        'required' => $fileOptions['alt']['required'],
-                        'mapped' => $fileOptions['alt']['mapped'],
-                        'constraints' => [
-                            new NotBlank([
-                                'message' => $fileOptions['alt']['constraints']['not-blank']['message'],
-                                'groups' => $fileOptions['alt']['constraints']['not-blank']['groups'],
-                            ]),
-                        ],
-                    ])
-                ;
-
-                if (!$options['coverImage']) {
-                    $form
                         ->add('url', UrlType::class, [
+                            'priority' => 1,
                             'label' => 'form.trick.medias.url.label',
                             'attr' => [
                                 'url' => true,
@@ -184,7 +81,56 @@ class MediaType extends AbstractType {
                             ]
                         ])
                     ;
+
+                    $messageKey = "medias.file";
+                    $constraintsGroups = ['image'];
+                    $fileAttr = [
+                        'file' => true,
+                        'dynamicRequire' => true,
+                    ];
+                    $fileAltAttr = $fileAttr;
+                } else {
+                    $messageKey = "cover-image";
+                    $constraintsGroups = ['Default'];
                 }
+
+                $form
+                    ->add('file', FileType::class, [
+                        'label' => "form.trick.$messageKey.label",
+                        'priority' => 2,
+                        'attr' => array_unique(array_merge($fileAttr, [
+                            'accept' => Media::ACCEPT_MIME_TYPE,
+                        ])),
+                        'required' => (!$options['coverImage'] ? false : $options['new']),
+                        'mapped' => false,
+                        'constraints' => [
+                            new File([
+                                'mimeTypes' => [
+                                    Media::ACCEPT_MIME_TYPE,
+                                ],
+                                'mimeTypesMessage' => "form.trick.$messageKey.wrong-mime-type",
+                                'groups' => $constraintsGroups,
+                            ]),
+                            new NotBlank([
+                                'message' => "form.trick.$messageKey.not-blank",
+                                'groups' => $constraintsGroups,
+                            ])
+                        ]
+                    ])
+                    ->add('alt', null, [
+                        'label' => "form.trick.$messageKey.alt.label",
+                        'priority' => 2,
+                        'attr' => $fileAltAttr,
+                        'required' => true,
+                        'mapped' => true,
+                        'constraints' => [
+                            new NotBlank([
+                                'message' => "form.trick.$messageKey.alt.not-blank",
+                                'groups' => $constraintsGroups,
+                            ]),
+                        ],
+                    ])
+                ;
             })
         ;
     }
