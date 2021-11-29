@@ -12,4 +12,4 @@ import './styles/app.scss';
 import './bootstrap';
 
 import '../node_modules/bootstrap/dist/js/bootstrap.bundle.min';
-import '../node_modules/jquery/dist/jquery.min';
+import '../node_modules/jquery/dist/jquery';

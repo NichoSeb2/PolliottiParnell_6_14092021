@@ -16,3 +16,24 @@ form:
   reset-password:
     password:
       label: "Mot de passe"
+  trick:
+    name:
+      label: "Nom"
+    description:
+      label: "Description"
+    category:
+      label: "Catégorie"
+    cover-image:
+      label: "Image de couverture"
+      alt:
+        label: "Description de l'image de couverture"
+    medias:
+      label: "Médias du trick"
+      type:
+        label: "Type du média"
+      file:
+        label: "Image à téléverser"
+        alt:
+          label: "Description de l'image téléversée"
+      url: 
+        label: "Lien de la vidéo"

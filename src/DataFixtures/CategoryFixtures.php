@@ -22,6 +22,10 @@ class CategoryFixtures extends Fixture implements OrderedFixtureInterface {
 		$this->addReference(self::CATEGORY_GRABS_REFERENCE, $category);
 		$manager->persist($category);
 
+		$category = new Category();
+		$category->setName("Slides");
+		$manager->persist($category);
+
 		$manager->flush();
 	}
 }

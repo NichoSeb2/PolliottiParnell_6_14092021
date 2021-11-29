@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{ parent() }}
+	-
+	Création de trick
+{% endblock %}
+
+{# {% block stylesheets %}
+    {{parent()}}
+{% endblock %} #}
+
+{% block javascripts %}
+    {{parent()}}
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+	<script>
+		$(document).ready(() => {
+			$('.add-another-collection-widget').click(function (e) {
+				const list = $($(this).attr('data-list-selector'));
+				let counter = list.data('widget-counter') || list.children().length;
+
+				let newWidget = list.attr('data-prototype');
+				newWidget = newWidget.replace(/__name__/g, counter);
+				counter++;
+
+				list.data('widget-counter', counter);
+
+				const newElement = $.parseHTML(newWidget);
+
+				list.append(newElement);
+			});
+		});
+	</script>
+{% endblock %}
+
+{% block body %}
+	<article class="container m-0 mb-4 p-0 text-center" style="margin-top: -90vh !important; max-width: 750px;">
+		{{ form_start(formTrick, {
+			class: 'w-100 h-100'
+		}) }}
+			<div class="bg-alpha p-2">
+				<h1 class="my-3">Création de trick</h1>
+
+				{{ form_row(formTrick.name) }}
+				{{ form_row(formTrick.description) }}
+				{{ form_row(formTrick.category) }}
+				{{ form_row(formTrick.coverImage) }}
+				{{ form_row(formTrick.medias) }}
+
+				<button type="button" class="add-another-collection-widget btn btn-primary text-light" data-list-selector="#trick_form_medias">Ajouter un autre média</button>
+
+				<div class="form-group my-3">
+					<button type="submit" class="btn btn-primary text-light">Créer le trick</button>
+				</div>
+
+				{% if trickSuccess is defined %}
+                    <div class="alert alert-success" data-controller="scroll-onload" id="createTrickSuccess">{{ trickSuccess|nl2br }}</div>
+                {% endif %}
+			</div>
+		{{ form_end(formTrick) }}
+	</article>
+{% endblock %}

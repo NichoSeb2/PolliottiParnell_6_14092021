@@ -3,6 +3,8 @@
 namespace App\Service;
 
 class VideoIdExtractor {
+    public const VIDEO_URL_REGEX = "/https?:\/\/(www\.)?((youtu(be)?)|(vimeo))\.[a-z]*\//";
+
 	public function getYoutubeId(string $url): ?string {
         preg_match("#(?<=v=)[a-zA-Z0-9-]+(?=&)|(?<=v\/)[^&\n]+(?=\?)|(?<=embed/)[^&\n]+|(?<=v=)[^&\n]+|(?<=youtu.be/)[^&\n]+#", $url, $matches);
 
@@ -14,7 +16,7 @@ class VideoIdExtractor {
     }
 
     public function getYoutubeTitle(string $id): string {
-        $data = explode(' - YouTube',explode('</title>',explode('<title>',file_get_contents("https://www.youtube.com/watch?v=$id"))[1])[0])[0];
+        $data = explode(' - YouTube', explode('</title>', explode('<title>', file_get_contents("https://www.youtube.com/watch?v=$id"))[1])[0])[0];
 
         $title = html_entity_decode($data, ENT_QUOTES | ENT_HTML5);
 

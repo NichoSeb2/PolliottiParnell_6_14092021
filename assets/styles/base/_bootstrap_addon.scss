@@ -79,6 +79,15 @@
 	}
 }
 
+.form-check {
+	margin: 0 .5rem;
+	margin-bottom: 0.125rem;
+
+	.form-check-label {
+		user-select: none;
+	}
+}
+
 @each $breakpoint in map-keys($grid-breakpoints) {
 	@include media-breakpoint-up($breakpoint) {
 		$infix: breakpoint-infix($breakpoint, $grid-breakpoints);
@@ -109,7 +118,7 @@
 	}
 }
 
-$alpha: rgba(255, 255, 255, 0.35);
+$alpha: rgba(0, 0, 0, 0.1);
 .bg-alpha {
 	background-color: $alpha;
 }

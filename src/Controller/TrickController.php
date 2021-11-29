@@ -2,26 +2,107 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Entity\Media;
 use App\Entity\Trick;
 use App\Entity\Comment;
+use App\Form\TrickFormType;
+use App\Service\ImageUploader;
+use App\Service\SlugConvertor;
 use App\Form\CreateCommentFormType;
 use App\Repository\TrickRepository;
 use App\Repository\CommentRepository;
+use Symfony\Component\Form\FormError;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class TrickController extends AbstractController {
-    public const INITIAL_TRICKS_DISPLAYED = 1;
-    public const ADDITIONAL_TRICKS_DISPLAYED = 2;
+    public const INITIAL_TRICKS_DISPLAYED = 5;
+    public const ADDITIONAL_TRICKS_DISPLAYED = 5;
+
+    /**
+     * @Route("/trick/create", name="app_trick_create", options={"expose"=true})
+     */
+    public function create(Request $request, SlugConvertor $slugConvertor, EntityManagerInterface $entityManager, TranslatorInterface $translator, ImageUploader $imageUploader): Response {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $trick = new Trick($slugConvertor, $entityManager);
+
+        $formTrick = $this->createForm(TrickFormType::class, $trick, ['new' => true]);
+        $formTrick->handleRequest($request);
+
+        if ($formTrick->isSubmitted() && $formTrick->isValid()) {
+            $coverImageFile = $formTrick->get("coverImage")->get("file")->getData();
+
+            if ($imageUploader->isValidImage($coverImageFile, Media::ACCEPT_MIME_TYPE)) {
+                $trick->getCoverImage()
+                    ->setUrl($imageUploader->uploadFile($coverImageFile, Media::UPLOAD_DIR))
+                    ->setAlt($formTrick->get("coverImage")->get("alt")->getData())
+                ;
+
+                foreach ($formTrick->get("medias") as $index => $mediaData) {
+                    /** @var Media $media */
+                    $media = $mediaData->getData();
+                    $media->setTrick($trick);
+
+                    switch ($mediaData->get("type")->getData()) {
+                        case Media::MEDIA_TYPE_LOCAL_FILE:
+                            $mediaFile = $mediaData->get("file")->getData();
+                            $media
+                                ->setUrl($imageUploader->uploadFile($mediaFile, Media::UPLOAD_DIR))
+                                ->setAlt($mediaData->get("alt")->getData())
+                            ;
+                            break;
+                        case Media::MEDIA_TYPE_URL:
+                            $media->setUrl($mediaData->get("url")->getData());
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                $trick
+                    ->setAuthor($user)
+                    ->updateSlug()
+                ;
+
+                foreach ($trick->getMedias() as $media) {
+                    /** @var Media $media */
+                    $entityManager->persist($media);
+                }
+
+                $entityManager->persist($trick->getCoverImage());
+                $entityManager->persist($trick);
+
+                $entityManager->flush();
+
+                return $this->render('trick/trick_create.html.twig', [
+                    'formTrick' => $formTrick->createView(),
+                    'trickSuccess' => $translator->trans("form.create-trick.success", [], "validators"),
+                ]);
+            } else {
+                $formTrick->get("coverImage")->addError(new FormError($translator->trans("form.trick.cover-image.wrong-mime-type", [], "validators")));
+            }
+        }
+
+        return $this->render('trick/trick_create.html.twig', [
+            'formTrick' => $formTrick->createView(),
+        ]);
+    }
 
     /**
      * @Route("/trick/{slug}", name="app_trick", options={"expose"=true})
      */
     public function trick(Request $request, Trick $trick, CommentRepository $commentRepository, EntityManagerInterface $entityManager, TranslatorInterface $translator): Response {
+        $createCommentSuccess = null;
+
+        /** @var User $user */
         $user = $this->getUser();
         $comment = new Comment();
 
@@ -29,33 +110,25 @@ class TrickController extends AbstractController {
         $formCreateComment->handleRequest($request);
 
         if ($formCreateComment->isSubmitted() && $formCreateComment->isValid()) {
-            $trick->addComment($comment);
-            $user->addComment($comment);
+            $comment
+                ->setTrick($trick)
+                ->setAuthor($user)
+            ;
 
             $entityManager->persist($comment);
-            $entityManager->persist($trick);
-            $entityManager->persist($user);
-
             $entityManager->flush();
 
-            $comments = $commentRepository->findBy(['trick' => $trick], ['createdAt' => "DESC"], CommentController::INITIAL_COMMENTS_DISPLAYED);
-            $trick->setComments($comments);
-
-            return $this->render('trick/trick.html.twig', [
-                'ADDITIONAL_COMMENTS_DISPLAYED' => CommentController::ADDITIONAL_COMMENTS_DISPLAYED, 
-                'trick' => $trick, 
-                'formCreateComment' => $formCreateComment->createView(),
-                'createCommentSuccess' => $translator->trans("form.create-comment.success", [], "validators"),
-            ]);
+            $createCommentSuccess = $translator->trans("form.create-comment.success", [], "validators");
         }
 
-        $comments = $commentRepository->findBy(['trick' => $trick], ['createdAt' => "DESC"], CommentController::INITIAL_COMMENTS_DISPLAYED);
-        $trick->setComments($comments);
+        $comments = $commentRepository->findBy(['trick' => $trick, 'status' => true], ['createdAt' => "DESC"], CommentController::INITIAL_COMMENTS_DISPLAYED);
+        $trick->setComments(new ArrayCollection($comments));
 
         return $this->render('trick/trick.html.twig', [
             'ADDITIONAL_COMMENTS_DISPLAYED' => CommentController::ADDITIONAL_COMMENTS_DISPLAYED, 
             'trick' => $trick, 
             'formCreateComment' => $formCreateComment->createView(),
+            'createCommentSuccess' => $createCommentSuccess,
         ]);
     }
 

@@ -11,6 +11,12 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  * @ORM\Entity(repositoryClass=MediaRepository::class)
  */
 class Media {
+    public const UPLOAD_DIR = "./uploads/";
+    public const ACCEPT_MIME_TYPE = "image/*";
+
+    public const MEDIA_TYPE_LOCAL_FILE = "file";
+    public const MEDIA_TYPE_URL = "url";
+
     /**
      * Hook timestampable behavior
      * updates createdAt, updatedAt fields
