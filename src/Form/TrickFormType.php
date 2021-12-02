@@ -46,16 +46,19 @@ class TrickFormType extends AbstractType {
             ])
             ->add('coverImage', MediaType::class, [
                 'label' => false,
-                'new' => true,
+                'new' => $options['new'],
                 'coverImage' => true,
             ])
             ->add('medias', CollectionType::class, [
                 'entry_type' => MediaType::class,
-                'label' => 'form.trick.medias.label',
-                'allow_add' => true,
                 'entry_options' => [
                     'new' => $options['new'],
+                    'attr' => [
+                        'data-controller' => "media-label-fix",
+                    ],
                 ],
+                'label' => 'form.trick.medias.label',
+                'allow_add' => true,
             ])
         ;
     }

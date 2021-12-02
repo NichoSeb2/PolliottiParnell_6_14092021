@@ -1,12 +1,12 @@
-<a href="/trick/{{ trick.slug }}"><img class="card-img-top w-100" src="{{ trick.coverImage.url }}" alt="{{ trick.coverImage.alt }}"></a>
+<a href="{{ path('app_trick', { slug: trick.slug }) }}"><img class="card-img-top w-100" src="{{ trick.coverImage.url }}" alt="{{ trick.coverImage.alt }}"></a>
 <div class="card-body p-1 d-flex flex-rox justify-content-between align-content-center">
 	<h5 class="card-title m-0 p-1">{{ trick.name }}</h5>
 
 	{% if app.user %}
 		<div class="d-flex justify-content-end align-items-start">
-			<button type="submit" class="btn p-1 fs-6">
+			<a href="{{ path('app_trick_edit', { slug: trick.slug }) }}" class="btn p-1 fs-6">
 				<i class="fas fa-pencil-alt"></i>
-			</button>
+			</a>
 			<button type="button" class="btn p-1 fs-6" data-bs-toggle="modal" data-bs-target="#trickDeleteModal">
 				<i class="fas fa-trash-alt"></i>
 			</button>

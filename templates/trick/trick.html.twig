@@ -41,9 +41,9 @@
 
 				{% if app.user %}
 					<div class="position-absolute top-0 end-0">
-						<button type="submit" class="btn p-1 fs-6">
+						<a href="{{ path('app_trick_edit', { slug: trick.slug }) }}" class="btn p-1 fs-6">
 							<i class="fas fa-pencil-alt"></i>
-						</button>
+						</a>
 						<button type="button" class="btn p-1 fs-6" data-bs-toggle="modal" data-bs-target="#trickDeleteModal">
 							<i class="fas fa-trash-alt"></i>
 						</button>

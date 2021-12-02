@@ -60,3 +60,5 @@ form:
         not-blank: "Veuillez entrer un url."
   create-trick:
     success: "Le trick a bien été créé."
+  edit-trick:
+    success: "Le trick a bien été mis à jour."
