@@ -59,6 +59,7 @@ class TrickFormType extends AbstractType {
                 ],
                 'label' => 'form.trick.medias.label',
                 'allow_add' => true,
+                'allow_delete' => true
             ])
         ;
     }

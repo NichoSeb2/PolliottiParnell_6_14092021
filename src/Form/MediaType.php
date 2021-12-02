@@ -51,8 +51,8 @@ class MediaType extends AbstractType {
                                     'class' => "d-flex justify-content-center"
                                 ],
                                 'choices' => [
-                                    'Image' => Media::MEDIA_TYPE_LOCAL_FILE,
-                                    'Vidéo' => Media::MEDIA_TYPE_URL
+                                    'form.trick.medias.type.options.file' => Media::MEDIA_TYPE_LOCAL_FILE,
+                                    'form.trick.medias.type.options.url' => Media::MEDIA_TYPE_URL
                                 ],
                                 'expanded' => true,
                                 'multiple' => false,
@@ -78,6 +78,8 @@ class MediaType extends AbstractType {
                             ->add('url', UrlType::class, [
                                 'priority' => 1,
                                 'label' => "form.trick.medias.url.label",
+                                'help' => "form.trick.medias.url.help",
+                                'help_html' => true,
                                 'attr' => array_merge($urlAttr, [
                                     'url' => true,
                                     'dynamicRequire' => true,
