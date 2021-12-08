@@ -120,6 +120,11 @@ class MediaType extends AbstractType {
                     $constraintsGroups = ['cover-image'];
                 }
 
+                if (!$options['new'] && !is_null($media->getUrl())) {
+                    $fileAttr['data-controller'] = "media-preview";
+                    $fileAttr['url'] = $media->getUrl();
+                }
+
                 if ($options['new'] || is_null($media->getId()) || !$this->mediaUploader->isValidVideoUrl($media->getUrl())) {
                     $form
                         ->add('file', FileType::class, [

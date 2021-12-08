@@ -3,14 +3,15 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Entity\Media;
 use App\Entity\Trick;
 use App\Entity\Comment;
 use App\Form\TrickFormType;
+use App\Service\TrickManager;
 use App\Service\MediaUploader;
 use App\Service\SlugConvertor;
 use App\Form\CreateCommentFormType;
 use App\Repository\TrickRepository;
+use App\Exception\FileTypeException;
 use App\Repository\CommentRepository;
 use Symfony\Component\Form\FormError;
 use Doctrine\ORM\EntityManagerInterface;
@@ -28,7 +29,7 @@ class TrickController extends AbstractController {
     /**
      * @Route("/trick/create", name="app_trick_create", options={"expose"=true})
      */
-    public function create(Request $request, SlugConvertor $slugConvertor, EntityManagerInterface $entityManager, TranslatorInterface $translator, MediaUploader $mediaUploader): Response {
+    public function create(Request $request, SlugConvertor $slugConvertor, EntityManagerInterface $entityManager, TranslatorInterface $translator, MediaUploader $mediaUploader, TrickManager $trickManager): Response {
         /** @var User $user */
         $user = $this->getUser();
 
@@ -38,52 +39,24 @@ class TrickController extends AbstractController {
         $formTrick->handleRequest($request);
 
         if ($formTrick->isSubmitted() && $formTrick->isValid()) {
-            $coverImageFile = $formTrick->get("coverImage")->get("file")->getData();
+            try {
+                $trickManager->processData($formTrick, TrickManager::CREATE_MODE, $trick, $user);
 
-            if ($mediaUploader->isValidImage($coverImageFile, Media::ACCEPT_MIME_TYPE)) {
-                $trick->getCoverImage()
-                    ->setUrl($mediaUploader->uploadFile($coverImageFile, Media::UPLOAD_DIR))
-                    ->setAlt($formTrick->get("coverImage")->get("alt")->getData())
-                ;
-
-                foreach ($formTrick->get("medias") as $index => $mediaData) {
-                    /** @var Media $media */
-                    $media = $mediaData->getData();
-                    $media->setTrick($trick);
-
-                    switch ($mediaData->get("type")->getData()) {
-                        case Media::MEDIA_TYPE_LOCAL_FILE:
-                            $mediaFile = $mediaData->get("file")->getData();
-                            $media
-                                ->setUrl($mediaUploader->uploadFile($mediaFile, Media::UPLOAD_DIR))
-                                ->setAlt($mediaData->get("alt")->getData())
-                            ;
-                            break;
-                        case Media::MEDIA_TYPE_URL:
-                            $media->setUrl($mediaData->get("url")->getData());
-                            break;
-                        default:
-                            break;
-                    }
-
+                foreach ($trickManager->getMedias() as $media) {
                     $entityManager->persist($media);
                 }
 
-                $trick
-                    ->setAuthor($user)
-                    ->updateSlug()
-                ;
+                $trick = $trickManager->getTrick();
 
                 $entityManager->persist($trick->getCoverImage());
                 $entityManager->persist($trick);
                 $entityManager->flush();
 
-                return $this->render('trick/trick_create.html.twig', [
-                    'formTrick' => $formTrick->createView(),
-                    'trickSuccess' => $translator->trans("form.create-trick.success", [], "validators"),
-                ]);
-            } else {
-                $formTrick->get("coverImage")->addError(new FormError($translator->trans("form.trick.cover-image.wrong-mime-type", [], "validators")));
+                $this->addFlash("success", $translator->trans("form.create-trick.success", [], "validators"));
+
+                return $this->redirectToRoute("app_home");
+            } catch (FileTypeException $e) {
+                $formTrick->get("coverImage")->addError(new FormError($e->getMessage()));
             }
         }
 
@@ -95,7 +68,7 @@ class TrickController extends AbstractController {
     /**
      * @Route("/trick/{slug}/edit", name="app_trick_edit", options={"expose"=true})
      */
-    public function edit(Trick $trick, Request $request, EntityManagerInterface $entityManager, TranslatorInterface $translator, MediaUploader $mediaUploader): Response {
+    public function edit(Trick $trick, Request $request, EntityManagerInterface $entityManager, TranslatorInterface $translator, TrickManager $trickManager): Response {
         /** @var User $user */
         $user = $this->getUser();
 
@@ -103,62 +76,22 @@ class TrickController extends AbstractController {
         $formTrick->handleRequest($request);
 
         if ($formTrick->isSubmitted() && $formTrick->isValid()) {
-            $coverImageFile = $formTrick->get("coverImage")->get("file")->getData();
+            $trickManager->processData($formTrick, TrickManager::EDIT_MODE, $trick, $user);
 
-            if (!is_null($coverImageFile)) {
-                if ($mediaUploader->isValidImage($coverImageFile, Media::ACCEPT_MIME_TYPE)) {
-                    $trick->getCoverImage()
-                        ->setUrl($mediaUploader->uploadFile($coverImageFile, Media::UPLOAD_DIR))
-                    ;
-                } else {
-                    $formTrick->get("coverImage")->addError(new FormError($translator->trans("form.trick.cover-image.wrong-mime-type", [], "validators")));
-                }
-            }
-
-            foreach ($formTrick->get("medias") as $index => $mediaData) {
-                /** @var Media $media */
-                $media = $mediaData->getData();
-                $media->setTrick($trick);
-
-                if (is_null($media->getId())) {
-                    switch ($mediaData->get("type")->getData()) {
-                        case Media::MEDIA_TYPE_LOCAL_FILE:
-                            $mediaFile = $mediaData->get("file")->getData();
-                            $media
-                                ->setUrl($mediaUploader->uploadFile($mediaFile, Media::UPLOAD_DIR))
-                                ->setAlt($mediaData->get("alt")->getData())
-                            ;
-                            break;
-                        case Media::MEDIA_TYPE_URL:
-                            $media->setUrl($mediaData->get("url")->getData());
-                            break;
-                        default:
-                            break;
-                    }
-                } else {
-                    if ($mediaUploader->isValidVideoUrl($media->getUrl())) {
-                        $media->setUrl($mediaData->get("url")->getData());
-                    } else {
-                        $mediaFile = $mediaData->get("file")->getData();
-
-                        if (!is_null($mediaFile)) {
-                            $media
-                                ->setUrl($mediaUploader->uploadFile($mediaFile, Media::UPLOAD_DIR))
-                            ;
-                        }
-                    }
-                }
-
+            foreach ($trickManager->getMedias() as $media) {
                 $entityManager->persist($media);
             }
+
+            $trick = $trickManager->getTrick();
 
             $entityManager->persist($trick->getCoverImage());
             $entityManager->persist($trick);
             $entityManager->flush();
 
-            return $this->render('trick/trick_edit.html.twig', [
-                'formTrick' => $formTrick->createView(),
-                'trickSuccess' => $translator->trans("form.edit-trick.success", [], "validators"),
+            $this->addFlash("success", $translator->trans("form.edit-trick.success", [], "validators"));
+
+            return $this->redirectToRoute("app_trick", [
+                'slug' => $trick->getSlug(), 
             ]);
         }
 

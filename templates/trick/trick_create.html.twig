@@ -33,10 +33,6 @@
 				<div class="form-group my-3">
 					<button type="submit" class="btn btn-primary text-light">Créer le trick</button>
 				</div>
-
-				{% if trickSuccess is defined %}
-                    <div class="alert alert-success" data-controller="scroll-onload" id="createTrickSuccess">{{ trickSuccess|nl2br }}</div>
-                {% endif %}
 			</div>
 		{{ form_end(formTrick) }}
 	</article>
