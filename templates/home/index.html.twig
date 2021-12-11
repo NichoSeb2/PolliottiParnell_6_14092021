@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block body %}
-	<div class="row justify-content-center align-content-between mt-4 px-2" id="tricksContainer">
+	<div class="row justify-content-center align-content-between mt-4 mb-4 px-2" id="tricksContainer">
 		{% for trick in tricks %}
 			<div class="col-lg-2 card m-2 p-0">
 				{% include "parts/_trick_card.html.twig" with { trick } %}
@@ -17,7 +17,7 @@
 	</div>
 
 	<div class="row justify-content-center align-content-between">
-		<div class="col-lg-2 mt-4">
+		<div class="col-lg-2">
 			<button type="button" class="btn btn-secondary d-block m-auto my-1" data-controller="load-more" to-load="{{ ADDITIONAL_TRICKS_DISPLAYED }}" route="app_trick_load_more" target="#tricksContainer">Charger plus</button>
 		</div>
 	</div>
@@ -30,7 +30,7 @@
 		</div>
 	{% endfor %}
 
-	<a href="#top" class="position-absolute bottom-0 end-0 btn btn-secondary m-4">
+	<a href="#top" class="position-absolute bottom-0 end-0 btn btn-secondary m-md-4 m-2">
 		<i class="fas fa-chevron-up"></i>
 	</a>
 

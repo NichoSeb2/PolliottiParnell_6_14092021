@@ -17,6 +17,10 @@ class Media {
     public const MEDIA_TYPE_LOCAL_FILE = "file";
     public const MEDIA_TYPE_URL = "url";
 
+    public const MEDIA_IMAGE_TYPE = "image";
+    public const MEDIA_VIDEO_TYPE_YOUTUBE = "youtube";
+    public const MEDIA_VIDEO_TYPE_VIMEO = "vimeo";
+
     /**
      * Hook timestampable behavior
      * updates createdAt, updatedAt fields
@@ -90,14 +94,14 @@ class Media {
         if (isset($parse['host'])) {
             if (preg_match("#youtu(?:be\.com|\.be)#", $parse['host'])) {
                 // youtube link
-                return "youtube";
+                return self::MEDIA_VIDEO_TYPE_YOUTUBE;
             } else if (preg_match("#vimeo(?:\.com)#", $parse['host'])) {
                 // vimeo link
-                return "vimeo";
+                return self::MEDIA_VIDEO_TYPE_VIMEO;
             }
         } else {
             // local image
-            return "image";
+            return self::MEDIA_IMAGE_TYPE;
         }
     }
 }

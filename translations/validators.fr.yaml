@@ -55,7 +55,7 @@ form:
         alt:
           not-blank: "Veuillez entrer une description pour l'image téléversée."
       url:
-        wrong-url-format: "Veuillez entrer l'url d'une vidéo YouTube ou Viméo."
+        wrong-url-format: "Veuillez entrer l'url d'une vidéo YouTube ou Vimeo."
         not-url: "Veuillez entrer un url."
         not-blank: "Veuillez entrer un url."
   create-trick:

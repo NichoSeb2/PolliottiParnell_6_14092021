@@ -11,8 +11,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class CommentController extends AbstractController {
-    public const INITIAL_COMMENTS_DISPLAYED = 5;
-    public const ADDITIONAL_COMMENTS_DISPLAYED = 5;
+    public const INITIAL_COMMENTS_DISPLAYED = 10;
+    public const ADDITIONAL_COMMENTS_DISPLAYED = 10;
 
     /**
      * @Route("/comment_load_more/{loaded}/{to_load}/{parent_id}", name="app_comment_load_more", options={"expose"=true})
