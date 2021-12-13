@@ -40,41 +40,22 @@ class TrickController extends AbstractController {
 
         if ($formTrick->isSubmitted() && $formTrick->isValid()) {
             try {
-                $hasComplexError = false;
-
                 $trickManager->processData($formTrick, TrickManager::CREATE_MODE, $trick, $user);
                 $formTrick = $trickManager->getForm();
 
-                foreach ($formTrick->get("medias") as $index => $mediaData) {
-                    /** @var Media $media */
-                    $media = $mediaData->getData();
-
-                    try {
-                        $trickManager->verifyVideoUrl($media);
-                    } catch (FileTypeException $e) {
-                        $hasComplexError = true;
-
-                        $mediaData->addError(new FormError($e->getMessage()));
-                    }
+                foreach ($trickManager->getMedias() as $media) {
+                    $entityManager->persist($media);
                 }
 
-                if (!$hasComplexError) {
-                    foreach ($trickManager->getMedias() as $media) {
-                        $entityManager->persist($media);
-                    }
+                $trick = $trickManager->getTrick();
 
-                    $trick = $trickManager->getTrick();
+                $entityManager->persist($trick->getCoverImage());
+                $entityManager->persist($trick);
+                $entityManager->flush();
 
-                    $entityManager->persist($trick->getCoverImage());
-                    $entityManager->persist($trick);
-                    $entityManager->flush();
+                $this->addFlash("success", $translator->trans("form.create-trick.success", [], "validators"));
 
-                    $this->addFlash("success", $translator->trans("form.create-trick.success", [], "validators"));
-
-                    return $this->redirectToRoute("app_home");
-                }
-
-                // dump($formTrick->getErrors(), $formTrick->get("medias")->getErrors());
+                return $this->redirectToRoute("app_home");
             } catch (FileTypeException $e) {
                 $formTrick->get("coverImage")->addError(new FormError($e->getMessage()));
             }
@@ -96,26 +77,11 @@ class TrickController extends AbstractController {
         $formTrick->handleRequest($request);
 
         if ($formTrick->isSubmitted() && $formTrick->isValid()) {
-            $hasComplexError = false;
-
             $trickManager->processData($formTrick, TrickManager::EDIT_MODE, $trick, $user);
             $formTrick = $trickManager->getForm();
 
             foreach ($trickManager->getMedias() as $media) {
                 $entityManager->persist($media);
-            }
-
-            foreach ($formTrick->get("medias") as $index => $mediaData) {
-                /** @var Media $media */
-                $media = $mediaData->getData();
-
-                try {
-                    $trickManager->verifyVideoUrl($media);
-                } catch (FileTypeException $e) {
-                    $hasComplexError = true;
-
-                    $mediaData->addError(new FormError($e->getMessage()));
-                }
             }
 
             $trick = $trickManager->getTrick();
@@ -124,15 +90,11 @@ class TrickController extends AbstractController {
             $entityManager->persist($trick);
             $entityManager->flush();
 
-            if (!$hasComplexError) {
-                $this->addFlash("success", $translator->trans("form.edit-trick.success", [], "validators"));
+            $this->addFlash("success", $translator->trans("form.edit-trick.success", [], "validators"));
 
-                return $this->redirectToRoute("app_trick", [
-                    'slug' => $trick->getSlug(), 
-                ]);
-            }
-
-            // dump($formTrick->getErrors(), $formTrick->get("medias")->getErrors());
+            return $this->redirectToRoute("app_trick", [
+                'slug' => $trick->getSlug(), 
+            ]);
         }
 
         return $this->render('trick/trick_edit.html.twig', [

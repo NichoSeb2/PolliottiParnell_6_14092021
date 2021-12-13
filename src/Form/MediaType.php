@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Media;
 use App\Service\MediaUploader;
 use App\Service\VideoIdExtractor;
+use App\Validator\VideoIdConstrains;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
@@ -94,6 +95,10 @@ class MediaType extends AbstractType {
                                     ]),
                                     new Regex([
                                         'value' => VideoIdExtractor::VIDEO_URL_REGEX,
+                                        'message' => "form.trick.medias.url.wrong-url-format",
+                                        'groups' => ['video'],
+                                    ]),
+                                    new VideoIdConstrains([
                                         'message' => "form.trick.medias.url.wrong-url-format",
                                         'groups' => ['video'],
                                     ]),

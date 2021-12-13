@@ -121,25 +121,9 @@ class TrickManager {
 		$this->trick = $trick;
 	}
 
-	public function verifyVideoUrl(Media $media): void {
-		$url = $media->getUrl();
-
-		if ($this->mediaUploader->isValidVideoUrl($url)) {
-			switch ($media->getType()) {
-				case Media::MEDIA_VIDEO_TYPE_YOUTUBE:
-					if (is_null($this->videoIdExtractor->getYoutubeId($url))) {
-						throw new FileTypeException($this->translator->trans("form.trick.medias.url.wrong-url-format", [], "validators"));
-					}
-					break;
-				case Media::MEDIA_VIDEO_TYPE_VIMEO:
-					if (is_null($this->videoIdExtractor->getVimeoId($url))) {
-						throw new FileTypeException($this->translator->trans("form.trick.medias.url.wrong-url-format", [], "validators"));
-					}
-					break;
-				default:
-					throw new FileTypeException($this->translator->trans("form.trick.medias.url.wrong-url-format", [], "validators"));
-					break;
-			}
+	public function verifyVideoUrl(string $url): void {
+		if ($this->mediaUploader->isValidVideoUrl($url) && (is_null($this->videoIdExtractor->getYoutubeId($url)) && is_null($this->videoIdExtractor->getVimeoId($url)))) {
+			throw new FileTypeException();
 		}
 	}
 
