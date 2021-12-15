@@ -43,11 +43,11 @@ class TrickController extends AbstractController {
                 $trickManager->processData($formTrick, TrickManager::CREATE_MODE, $trick, $user);
                 $formTrick = $trickManager->getForm();
 
+                $trick = $trickManager->getTrick();
+
                 foreach ($trickManager->getMedias() as $media) {
                     $entityManager->persist($media);
                 }
-
-                $trick = $trickManager->getTrick();
 
                 $entityManager->persist($trick->getCoverImage());
                 $entityManager->persist($trick);
@@ -80,11 +80,11 @@ class TrickController extends AbstractController {
             $trickManager->processData($formTrick, TrickManager::EDIT_MODE, $trick, $user);
             $formTrick = $trickManager->getForm();
 
+            $trick = $trickManager->getTrick();
+
             foreach ($trickManager->getMedias() as $media) {
                 $entityManager->persist($media);
             }
-
-            $trick = $trickManager->getTrick();
 
             $entityManager->persist($trick->getCoverImage());
             $entityManager->persist($trick);
