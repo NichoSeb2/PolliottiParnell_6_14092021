@@ -31,9 +31,13 @@ form:
       label: "Médias du trick"
       type:
         label: "Type du média"
+        options:
+          file: "Image"
+          url: "Vidéo"
       file:
         label: "Image à téléverser"
         alt:
           label: "Description de l'image téléversée"
       url: 
         label: "Lien de la vidéo"
+        help: '<i class="fas fa-info-circle"></i> Lien Youtube ou Vimeo'

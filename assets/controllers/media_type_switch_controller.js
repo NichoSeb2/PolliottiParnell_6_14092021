@@ -46,14 +46,18 @@ export default class extends Controller {
             if (visibility) {
                 element.show();
 
-                if (element.attr("dynamicRequire")) {
-                    element.attr("required", "");
+                if (element.is("input")) {
+                    if (element.attr("dynamicRequire")) {
+                        element.attr("required", "");
+                    }
                 }
             } else {
                 element.hide();
 
-                if (element.attr("dynamicRequire")) {
-                    element.removeAttr("required");
+                if (element.is("input")) {
+                    if (element.attr("dynamicRequire")) {
+                        element.removeAttr("required");
+                    }
                 }
             }
         });

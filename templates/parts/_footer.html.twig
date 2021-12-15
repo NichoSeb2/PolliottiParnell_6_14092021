@@ -1,4 +1,10 @@
-{% set relativePages = ['app_home', 'app_trick', 'app_admin_comment', 'app_trick_create'] %}
+{% set relativePages = [
+	'app_home', 
+	'app_trick', 
+	'app_admin_comment', 
+	'app_trick_create', 
+	'app_trick_edit'
+] %}
 
 <footer class="{{ app.request.get('_route') not in relativePages ? 'position-absolute bottom-0 start-0' : '' }} {{ app.request.get('_route') in relativePages ? 'border-top' : '' }} py-4 w-100">
 	<div class="container">

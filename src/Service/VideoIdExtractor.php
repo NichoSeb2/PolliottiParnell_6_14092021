@@ -3,7 +3,7 @@
 namespace App\Service;
 
 class VideoIdExtractor {
-    public const VIDEO_URL_REGEX = "/https?:\/\/(www\.)?((youtu(be)?)|(vimeo))\.[a-z]*\//";
+    public const VIDEO_URL_REGEX = "/https?:\/\/([a-z]*\.)?((youtu(be)?)|(vimeo))\.[a-z]*\//";
 
 	public function getYoutubeId(string $url): ?string {
         preg_match("#(?<=v=)[a-zA-Z0-9-]+(?=&)|(?<=v\/)[^&\n]+(?=\?)|(?<=embed/)[^&\n]+|(?<=v=)[^&\n]+|(?<=youtu.be/)[^&\n]+#", $url, $matches);
