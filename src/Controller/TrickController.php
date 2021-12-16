@@ -103,6 +103,26 @@ class TrickController extends AbstractController {
     }
 
     /**
+     * @Route("/trick/{slug}/delete", name="app_trick_delete", options={"expose"=true})
+     */
+    public function delete(Trick $trick, EntityManagerInterface $entityManager, TranslatorInterface $translator): Response {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        foreach ($trick->getMedias() as $media) {
+            $entityManager->remove($media);
+            $entityManager->flush();
+        }
+
+        $entityManager->remove($trick);
+        $entityManager->flush();
+
+        $this->addFlash("success", $translator->trans("form.delete-trick.success", [], "validators"));
+
+        return $this->redirectToRoute("app_home");
+    }
+
+    /**
      * @Route("/trick/{slug}", name="app_trick", options={"expose"=true})
      */
     public function trick(Request $request, Trick $trick, CommentRepository $commentRepository, EntityManagerInterface $entityManager, TranslatorInterface $translator): Response {

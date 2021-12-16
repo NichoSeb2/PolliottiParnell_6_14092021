@@ -37,8 +37,7 @@ class TrickFixtures extends Fixture implements OrderedFixtureInterface {
 			->setAuthor($this->getReference(UserFixtures::ADMIN_REFERENCE))
 			->setCategory($this->getReference(CategoryFixtures::CATEGORY_GRABS_REFERENCE))
 			->setCoverImage($this->getReference(CoverImageFixtures::MEDIA_TAIL_GRAB_REFERENCE))
-			->addContributor($this->getReference(UserFixtures::ADMIN_REFERENCE))
-			->addContributor($this->getReference(UserFixtures::COMMENTATOR_REFERENCE))
+			->addContributor($this->getReference(UserFixtures::VERIFIED_USER_REFERENCE))
 		;
 		$this->addReference(self::TRICK_TAIL_GRAB_REFERENCE, $trick);
 		$manager->persist($trick);
