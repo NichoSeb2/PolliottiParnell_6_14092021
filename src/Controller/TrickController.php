@@ -3,12 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Entity\Media;
 use App\Entity\Trick;
 use App\Entity\Comment;
 use App\Form\TrickFormType;
 use App\Service\TrickManager;
 use App\Service\SlugConvertor;
+use App\Security\Voter\TrickVoter;
 use App\Form\CreateCommentFormType;
 use App\Repository\TrickRepository;
 use App\Exception\FileTypeException;
@@ -106,8 +106,7 @@ class TrickController extends AbstractController {
      * @Route("/trick/{slug}/delete", name="app_trick_delete", options={"expose"=true})
      */
     public function delete(Trick $trick, EntityManagerInterface $entityManager, TranslatorInterface $translator): Response {
-        /** @var User $user */
-        $user = $this->getUser();
+        $this->denyAccessUnlessGranted(TrickVoter::DELETE_TRICK, $trick);
 
         foreach ($trick->getMedias() as $media) {
             $entityManager->remove($media);
