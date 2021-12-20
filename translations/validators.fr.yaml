@@ -62,3 +62,5 @@ form:
     success: "Le trick a bien été créé."
   edit-trick:
     success: "Le trick a bien été mis à jour."
+  delete-trick:
+    success: "Le trick a bien été supprimé."
