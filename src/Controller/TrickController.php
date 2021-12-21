@@ -49,7 +49,9 @@ class TrickController extends AbstractController {
                     $entityManager->persist($media);
                 }
 
-                $entityManager->persist($trick->getCoverImage());
+                if (!is_null($trick->getCoverImage())) {
+                    $entityManager->persist($trick->getCoverImage());
+                }
                 $entityManager->persist($trick);
                 $entityManager->flush();
 
@@ -86,7 +88,9 @@ class TrickController extends AbstractController {
                 $entityManager->persist($media);
             }
 
-            $entityManager->persist($trick->getCoverImage());
+            if (!is_null($trick->getCoverImage())) {
+                $entityManager->persist($trick->getCoverImage());
+            }
             $entityManager->persist($trick);
             $entityManager->flush();
 

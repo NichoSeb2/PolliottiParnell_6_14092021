@@ -138,7 +138,7 @@ class MediaType extends AbstractType {
                             'attr' => array_merge($fileAttr, [
                                 'accept' => Media::ACCEPT_MIME_TYPE,
                             ]),
-                            'required' => (!$options['coverImage'] ? false : $options['new']),
+                            'required' => false,
                             'mapped' => false,
                             'constraints' => [
                                 new File([
@@ -158,7 +158,7 @@ class MediaType extends AbstractType {
                             'label' => "form.trick.$messageKey.alt.label",
                             'priority' => 2,
                             'attr' => $fileAltAttr,
-                            'required' => true,
+                            'required' => !$options['coverImage'],
                             'mapped' => true,
                             'constraints' => [
                                 new NotBlank([
@@ -198,9 +198,6 @@ class MediaType extends AbstractType {
                                 break;
                         }
                     }
-
-                    $groups[] = "cover-image";
-
                 } else {
                     $groups = ['video'];
                 }
