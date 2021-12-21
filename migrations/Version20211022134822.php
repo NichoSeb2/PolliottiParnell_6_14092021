@@ -9,7 +9,7 @@ use Doctrine\Migrations\AbstractMigration;
 
 final class Version20211022134822 extends AbstractMigration {
     public function getDescription(): string {
-        return '';
+        return 'Added unique constrain to the slug and email field';
     }
 
     public function up(Schema $schema): void {

@@ -53,6 +53,14 @@ class MediaFixtures extends Fixture implements OrderedFixtureInterface {
 		;
 		$manager->persist($media);
 
+		$media = new Media();
+		$media
+			->setUrl(self::newLocalFile("/uploads/fixtures/tail_grab.jpg"))
+			->setAlt("Tail grab")
+			->setTrick($this->getReference(TrickFixtures::TRICK_TRUCK_DRIVER_REFERENCE))
+		;
+		$manager->persist($media);
+
 		$manager->flush();
 	}
 

@@ -124,7 +124,7 @@ class TrickController extends AbstractController {
     /**
      * @Route("/trick/{slug}", name="app_trick", options={"expose"=true})
      */
-    public function trick(Request $request, Trick $trick, CommentRepository $commentRepository, EntityManagerInterface $entityManager, TranslatorInterface $translator): Response {
+    public function trick(Request $request, Trick $trick, CommentRepository $commentRepository, EntityManagerInterface $entityManager, TranslatorInterface $translator, TrickManager $trickManager): Response {
         $createCommentSuccess = null;
 
         /** @var User $user */
@@ -148,6 +148,8 @@ class TrickController extends AbstractController {
 
         $comments = $commentRepository->findBy(['trick' => $trick, 'status' => true], ['createdAt' => "DESC"], CommentController::INITIAL_COMMENTS_DISPLAYED);
         $trick->setComments(new ArrayCollection($comments));
+
+        $trick = $trickManager->fixDefaultCoverImage($trick);
 
         return $this->render('trick/trick.html.twig', [
             'ADDITIONAL_COMMENTS_DISPLAYED' => CommentController::ADDITIONAL_COMMENTS_DISPLAYED, 

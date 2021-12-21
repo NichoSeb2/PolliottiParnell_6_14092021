@@ -142,4 +142,17 @@ class TrickManager {
 	public function getDeletedMedias() : array {
 		return $this->deletedMedias;
 	}
+
+	public function fixDefaultCoverImage(Trick $trick): Trick {
+		if (is_null($trick->getCoverImage())) {
+			foreach ($trick->getMedias() as $media) {
+				if (!$this->mediaUploader->isValidVideoUrl($media->getUrl())) {
+					$trick->setCoverImage($media);
+					break;
+				}
+			}
+		}
+
+		return $trick;
+	}
 }

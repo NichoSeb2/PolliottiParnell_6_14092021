@@ -69,7 +69,7 @@ class Trick {
 
     /**
      * @ORM\OneToOne(targetEntity=Media::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $coverImage;
 
@@ -228,7 +228,7 @@ class Trick {
         return $this->coverImage;
     }
 
-    public function setCoverImage(Media $coverImage): self {
+    public function setCoverImage(?Media $coverImage): self {
         $this->coverImage = $coverImage;
 
         return $this;
