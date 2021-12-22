@@ -13,6 +13,7 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 
 class TrickFixtures extends Fixture implements OrderedFixtureInterface {
 	public const TRICK_TAIL_GRAB_REFERENCE = "trick-tail-grab";
+	public const TRICK_TRUCK_DRIVER_REFERENCE = "trick-truck-driver";
 
 	public function __construct() {}
 
@@ -36,9 +37,8 @@ class TrickFixtures extends Fixture implements OrderedFixtureInterface {
 			->setDescription("Saisie de la partie arrière de la planche, avec la main arrière.")
 			->setAuthor($this->getReference(UserFixtures::ADMIN_REFERENCE))
 			->setCategory($this->getReference(CategoryFixtures::CATEGORY_GRABS_REFERENCE))
-			->setCoverImage($this->getReference(CoverImageFixtures::MEDIA_TAIL_GRAB_REFERENCE))
-			->addContributor($this->getReference(UserFixtures::ADMIN_REFERENCE))
-			->addContributor($this->getReference(UserFixtures::COMMENTATOR_REFERENCE))
+			// ->setCoverImage($this->getReference(CoverImageFixtures::MEDIA_TAIL_GRAB_REFERENCE))
+			->addContributor($this->getReference(UserFixtures::VERIFIED_USER_REFERENCE))
 		;
 		$this->addReference(self::TRICK_TAIL_GRAB_REFERENCE, $trick);
 		$manager->persist($trick);
@@ -63,8 +63,8 @@ class TrickFixtures extends Fixture implements OrderedFixtureInterface {
 			->setDescription("Saisie du carre avant et carre arrière avec chaque main (comme tenir un volant de voiture).")
 			->setAuthor($this->getReference(UserFixtures::ADMIN_REFERENCE))
 			->setCategory($this->getReference(CategoryFixtures::CATEGORY_GRABS_REFERENCE))
-			->setCoverImage($this->getReference(CoverImageFixtures::MEDIA_TRUCK_DRIVER_REFERENCE))
 		;
+		$this->addReference(self::TRICK_TRUCK_DRIVER_REFERENCE, $trick);
 		$manager->persist($trick);
 		$manager->flush();
 
@@ -75,7 +75,6 @@ class TrickFixtures extends Fixture implements OrderedFixtureInterface {
 			->setDescription("Saisie de la carre frontside de la planche, entre les deux pieds, avec la main arrière.")
 			->setAuthor($this->getReference(UserFixtures::ADMIN_REFERENCE))
 			->setCategory($this->getReference(CategoryFixtures::CATEGORY_GRABS_REFERENCE))
-			->setCoverImage($this->getReference(CoverImageFixtures::MEDIA_INDY_REFERENCE))
 		;
 		$manager->persist($trick);
 		$manager->flush();

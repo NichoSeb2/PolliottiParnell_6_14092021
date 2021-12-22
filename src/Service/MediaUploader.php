@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\Media;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -35,5 +36,17 @@ class MediaUploader {
 		}
 
 		return str_replace("./", "/", $dir). $targetFileName;
+	}
+
+	public function removeFile(string $path): bool {
+		if (str_starts_with($path, Media::UPLOAD_DIR. "fixtures/")) {
+			return false;
+		}
+
+		if (file_exists($path)) {
+			return unlink($path);
+		}
+
+		return false;
 	}
 }

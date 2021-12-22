@@ -3,12 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Entity\Media;
 use App\Entity\Trick;
 use App\Entity\Comment;
 use App\Form\TrickFormType;
 use App\Service\TrickManager;
 use App\Service\SlugConvertor;
+use App\Security\Voter\TrickVoter;
 use App\Form\CreateCommentFormType;
 use App\Repository\TrickRepository;
 use App\Exception\FileTypeException;
@@ -49,7 +49,9 @@ class TrickController extends AbstractController {
                     $entityManager->persist($media);
                 }
 
-                $entityManager->persist($trick->getCoverImage());
+                if (!is_null($trick->getCoverImage())) {
+                    $entityManager->persist($trick->getCoverImage());
+                }
                 $entityManager->persist($trick);
                 $entityManager->flush();
 
@@ -86,7 +88,9 @@ class TrickController extends AbstractController {
                 $entityManager->persist($media);
             }
 
-            $entityManager->persist($trick->getCoverImage());
+            if (!is_null($trick->getCoverImage())) {
+                $entityManager->persist($trick->getCoverImage());
+            }
             $entityManager->persist($trick);
             $entityManager->flush();
 
@@ -103,9 +107,28 @@ class TrickController extends AbstractController {
     }
 
     /**
+     * @Route("/trick/{slug}/delete", name="app_trick_delete", options={"expose"=true})
+     */
+    public function delete(Trick $trick, EntityManagerInterface $entityManager, TranslatorInterface $translator): Response {
+        $this->denyAccessUnlessGranted(TrickVoter::DELETE_TRICK, $trick);
+
+        foreach ($trick->getMedias() as $media) {
+            $entityManager->remove($media);
+            $entityManager->flush();
+        }
+
+        $entityManager->remove($trick);
+        $entityManager->flush();
+
+        $this->addFlash("success", $translator->trans("form.delete-trick.success", [], "validators"));
+
+        return $this->redirectToRoute("app_home");
+    }
+
+    /**
      * @Route("/trick/{slug}", name="app_trick", options={"expose"=true})
      */
-    public function trick(Request $request, Trick $trick, CommentRepository $commentRepository, EntityManagerInterface $entityManager, TranslatorInterface $translator): Response {
+    public function trick(Request $request, Trick $trick, CommentRepository $commentRepository, EntityManagerInterface $entityManager, TranslatorInterface $translator, TrickManager $trickManager): Response {
         $createCommentSuccess = null;
 
         /** @var User $user */
@@ -129,6 +152,8 @@ class TrickController extends AbstractController {
 
         $comments = $commentRepository->findBy(['trick' => $trick, 'status' => true], ['createdAt' => "DESC"], CommentController::INITIAL_COMMENTS_DISPLAYED);
         $trick->setComments(new ArrayCollection($comments));
+
+        $trick = $trickManager->fixDefaultCoverImage($trick);
 
         return $this->render('trick/trick.html.twig', [
             'ADDITIONAL_COMMENTS_DISPLAYED' => CommentController::ADDITIONAL_COMMENTS_DISPLAYED, 

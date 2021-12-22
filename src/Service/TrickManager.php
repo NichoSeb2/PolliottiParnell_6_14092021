@@ -26,16 +26,20 @@ class TrickManager {
 
 		$coverImageFile = $this->form->get("coverImage")->get("file")->getData();
 
-		if ($mode == self::CREATE_MODE && !$this->mediaUploader->isValidImage($coverImageFile, Media::ACCEPT_MIME_TYPE)) {
+		if ($mode == self::CREATE_MODE && !is_null($coverImageFile) && !$this->mediaUploader->isValidImage($coverImageFile, Media::ACCEPT_MIME_TYPE)) {
 			throw new FileTypeException($this->translator->trans("form.trick.cover-image.wrong-mime-type", [], "validators"));
 		}
 
 		switch ($mode) {
 			case self::CREATE_MODE:
-				$trick->getCoverImage()
-                    ->setUrl($this->mediaUploader->uploadFile($coverImageFile, Media::UPLOAD_DIR))
-                    ->setAlt($this->form->get("coverImage")->get("alt")->getData())
-                ;
+				if (!is_null($coverImageFile)) {
+					$trick->getCoverImage()
+						->setUrl($this->mediaUploader->uploadFile($coverImageFile, Media::UPLOAD_DIR))
+						->setAlt($this->form->get("coverImage")->get("alt")->getData())
+					;
+				} else {
+					$trick->setCoverImage(null);
+				}
 
 				$trick
                     ->setAuthor($user)
@@ -51,6 +55,8 @@ class TrickManager {
 					} else {
 						$this->form->get("coverImage")->addError(new FormError($this->translator->trans("form.trick.cover-image.wrong-mime-type", [], "validators")));
 					}
+				} else if(is_null($trick->getCoverImage()->getId())) {
+					$trick->setCoverImage(null);
 				}
 
 				$trick->addContributor($user);
@@ -141,5 +147,18 @@ class TrickManager {
 
 	public function getDeletedMedias() : array {
 		return $this->deletedMedias;
+	}
+
+	public function fixDefaultCoverImage(Trick $trick): Trick {
+		if (is_null($trick->getCoverImage())) {
+			foreach ($trick->getMedias() as $media) {
+				if (!$this->mediaUploader->isValidVideoUrl($media->getUrl())) {
+					$trick->setCoverImage($media);
+					break;
+				}
+			}
+		}
+
+		return $trick;
 	}
 }

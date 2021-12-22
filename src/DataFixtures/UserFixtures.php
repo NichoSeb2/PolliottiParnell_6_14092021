@@ -11,7 +11,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserFixtures extends Fixture implements OrderedFixtureInterface {
 	public const ADMIN_REFERENCE = "admin";
-	public const COMMENTATOR_REFERENCE = "commentator";
+	public const VERIFIED_USER_REFERENCE = "verified_user";
 
 	public function __construct(private UserPasswordHasherInterface $passwordHasher) {}
 
@@ -44,7 +44,7 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface {
 				'azerty'
 			))
 		;
-		$this->addReference(self::COMMENTATOR_REFERENCE, $user);
+		$this->addReference(self::VERIFIED_USER_REFERENCE, $user);
 		$manager->persist($user);
 
 		$user = new User();
