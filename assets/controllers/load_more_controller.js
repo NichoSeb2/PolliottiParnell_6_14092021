@@ -48,8 +48,14 @@ export default class extends Controller {
                         container.append(element);                        
                     });
 
+                    const threshold = parseInt(button.attr("threshold"));
+
                     if ((loaded + elements.length) >= max_element) {
-                        button.remove();
+                        button.parent().remove();
+                    }
+
+                    if (threshold != undefined && (loaded + elements.length) >= threshold) {
+                        $(button.attr("threshold-target")).removeClass("d-none");
                     }
                 }, 
                 error: (response, status, error) => {}, 

@@ -23,7 +23,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class TrickController extends AbstractController {
-    public const INITIAL_TRICKS_DISPLAYED = 5;
+    public const INITIAL_TRICKS_DISPLAYED = 0;
     public const ADDITIONAL_TRICKS_DISPLAYED = 5;
 
     /**
