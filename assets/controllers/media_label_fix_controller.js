@@ -13,8 +13,7 @@ export default class extends Controller {
             .addClass("btn p-1 fs-5")
             .css("margin-bottom", "4px")
             .css("margin-left", "4px")
-            .attr("type", "button")
-            .attr("data-controller", "media-delete");
+            .attr("type", "button");
 
         deleteButton.on("click", function() {
             $(this).parent().parent().remove();

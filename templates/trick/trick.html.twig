@@ -41,12 +41,15 @@
 
 				{% if app.user %}
 					<div class="position-absolute top-0 end-0">
-						<a href="{{ path('app_trick_edit', { slug: trick.slug }) }}" class="btn p-1 fs-6">
+						<a href="{{ path('app_trick_edit', { slug: trick.slug }) }}" class="btn p-1 fs-6" title="Édition de trick">
 							<i class="fas fa-pencil-alt"></i>
 						</a>
-						<button type="button" class="btn p-1 fs-6" data-controller="update-trick-delete-modal" data-bs-toggle="modal" data-bs-target="#trickDeleteModal" slug="{{ trick.slug }}">
-							<i class="fas fa-trash-alt"></i>
-						</button>
+
+						{% if is_granted('delete_trick', trick) %}
+							<button type="button" class="btn p-1 fs-6" data-controller="update-delete-modal" data-bs-toggle="modal" data-bs-target="#trickDeleteModal" title="Supression de trick" body="Etes vous sure de vouloir supprimer ce trick ? Cette action est irrévocable." link="{{ path('app_trick_delete', { slug: trick.slug }) }}">
+								<i class="fas fa-trash-alt"></i>
+							</button>
+						{% endif %}
 					</div>
 				{% endif %}
 			</div>
@@ -61,7 +64,9 @@
 					</div>
 				{% elseif media.type == "youtube" %}
 					<div class="col-lg-3 m-1 d-flex flex-column justify-content-center overlay-play bg-image a-r-16-9" data-bs-toggle="modal" data-bs-target="#fullscreenMediaModal" data-controller="update-content bg-image" bg-image-url="{{ videoIdExtractor.getYoutubeThumbnail(videoIdExtractor.getYoutubeId(media.url)) }}">
-						<i class="fas fa-play"></i>
+						<div class="icon">
+							<i class="fas fa-play"></i>
+						</div>
 						<div class="modal-container" title="{{ videoIdExtractor.getYoutubeTitle(videoIdExtractor.getYoutubeId(media.url)) }}">
 							<div class="video_wrapper">
 								<iframe width="100%" height="100%" src="https://www.youtube.com/embed/{{ videoIdExtractor.getYoutubeId(media.url) }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
@@ -70,7 +75,9 @@
 					</div>
 				{% elseif media.type == "vimeo" %}
 					<div class="col-lg-3 m-1 d-flex flex-column justify-content-center overlay-play bg-image a-r-16-9" data-bs-toggle="modal" data-bs-target="#fullscreenMediaModal" data-controller="update-content bg-image" bg-image-url="{{ videoIdExtractor.getVimeoThumbnail(videoIdExtractor.getVimeoId(media.url)) }}">
-						<i class="fas fa-play"></i>
+						<div class="icon">
+							<i class="fas fa-play"></i>
+						</div>
 						<div class="modal-container" title="{{ videoIdExtractor.getVimeoTitle(videoIdExtractor.getVimeoId(media.url)) }}">
 							<div class="video_wrapper">
 								<iframe src="https://player.vimeo.com/video/{{ videoIdExtractor.getVimeoId(media.url) }}" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
@@ -177,6 +184,6 @@
 		{% endif %}
 	</article>
 
-	{% include "parts/_trick_delete_modal.html.twig" %}
+	{% include "parts/_delete_modal.html.twig" %}
 	{% include "parts/_fullscreen_media_modal.html.twig" %}
 {% endblock %}

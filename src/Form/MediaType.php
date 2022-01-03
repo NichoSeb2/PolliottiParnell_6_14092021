@@ -49,7 +49,7 @@ class MediaType extends AbstractType {
                                 'label' => "form.trick.medias.type.label",
                                 'attr' => [
                                     'data-controller' => "media-type-switch",
-                                    'class' => "d-flex justify-content-center"
+                                    'class' => "d-flex justify-content-center flex-column"
                                 ],
                                 'choices' => [
                                     'form.trick.medias.type.options.file' => Media::MEDIA_TYPE_LOCAL_FILE,
@@ -123,11 +123,6 @@ class MediaType extends AbstractType {
                 } else {
                     $messageKey = "cover-image";
                     $constraintsGroups = ['cover-image'];
-                }
-
-                if (!$options['new'] && !is_null($media->getUrl())) {
-                    $fileAttr['data-controller'] = "media-preview";
-                    $fileAttr['url'] = $media->getUrl();
                 }
 
                 if ($options['new'] || is_null($media->getId()) || !$this->mediaUploader->isValidVideoUrl($media->getUrl())) {

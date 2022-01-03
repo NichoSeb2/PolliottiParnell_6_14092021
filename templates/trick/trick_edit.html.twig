@@ -6,38 +6,120 @@
 	Edition de trick
 {% endblock %}
 
-{# {% block stylesheets %}
+{% block javascripts %}
     {{parent()}}
-{% endblock %} #}
-
-{# {% block javascripts %}
-    {{parent()}}
-{% endblock %} #}
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+{% endblock %}
 
 {% block body %}
-	<article class="container m-0 mb-4 p-0 text-center" style="margin-top: -90vh !important; max-width: 750px;">
-		{{ form_start(formTrick, {
-			class: 'w-100 h-100'
-		}) }}
-			<div class="bg-alpha p-2">
-				<h1 class="my-3">Création de trick</h1>
+	<article class="container bg-light mb-5 p-0 pb-3" style="margin-top: -90vh !important;">
+		{{ form_start(formTrick) }}
+			<div class="position-relative d-flex flex-column justify-content-center align-content-between w-100 text-center bg-image bg-shade" data-controller="bg-image" bg-image-url="{{ formTrick.vars.value.coverImage.url|default(asset('images/placeholder.png')) }}" title="{{ formTrick.vars.value.coverImage.alt|default("Ce trick n'a pas d'image de couverture, il prendra automatiquement le premier media de type image l'ors de son affichage.") }}" min-height="500px">
+				<div class="col-lg-12">
+					{{ form_widget(formTrick.name, {
+						'attr': {
+							'class': 'text-center text-white bg-transparent border-0 shadow-none fs-1 fw-inherit'
+						}
+					}) }}
+					{{ form_errors(formTrick.name) }}
+					{{ form_help(formTrick.name) }}
 
-				{{ form_row(formTrick.name) }}
-				{{ form_row(formTrick.description) }}
-				{{ form_row(formTrick.category) }}
-				{{ form_row(formTrick.coverImage) }}
-				{{ form_row(formTrick.medias) }}
-
-				<button type="button" class="add-another-collection-widget btn btn-primary text-light" data-controller="media-add" data-list-selector="#trick_form_medias">Ajouter un autre média</button>
-
-				<div class="form-group my-3">
-					<button type="submit" class="btn btn-primary text-light">Sauvegarder le trick</button>
+					<div class="position-absolute top-0 end-0">
+						<button type="button" class="btn p-1 fs-6" data-bs-toggle="modal" data-bs-target="#coverImageModal" title="Édition de l'image de couverture">
+							<i class="fas fa-pencil-alt"></i>
+						</button>
+						<button type="button" class="btn p-1 fs-6" data-controller="update-delete-modal" data-bs-toggle="modal" data-bs-target="#trickDeleteModal" title="Supression de l'image de couverture" body="Etes vous sure de vouloir supprimer cette image de couverture ? Cette action est irrévocable." link="{{ path('app_cover_image_delete', { slug: formTrick.vars.value.slug }) }}">
+							<i class="fas fa-trash-alt"></i>
+						</button>
+					</div>
 				</div>
+			</div>
+			<div class="d-lg-flex d-none row w-100 text-center justify-content-center px-5 my-3" id="trick_form_medias" nb-media="{{ formTrick.vars.value.medias|length }}">
+				{% for media in formTrick.medias %}
+					<div class="col-lg-4 p-1">
+						{% if media.vars.value.type == "image" %}
+							<div class="d-flex flex-column justify-content-center overlay-play bg-image a-r-16-9" data-bs-toggle="modal" data-bs-target="#fullscreenMediaEditModal-{{ loop.index - 1 }}" data-controller="bg-image" bg-image-url="{{ media.vars.value.url }}">
+								<div class="button">
+									<i class="fas fa-pencil-alt" title="Édition du média"></i>
+									<i class="fas fa-trash-alt" title="Suppression du média"></i>
+								</div>
+							</div>
+						{% elseif media.vars.value.type == "youtube" %}
+							<div class="d-flex flex-column justify-content-center overlay-play bg-image a-r-16-9" data-bs-toggle="modal" data-bs-target="#fullscreenMediaEditModal-{{ loop.index - 1 }}" data-controller="bg-image" bg-image-url="{{ videoIdExtractor.getYoutubeThumbnail(videoIdExtractor.getYoutubeId(media.vars.value.url)) }}">
+								<div class="icon">
+									<i class="fas fa-play"></i>
+								</div>
+								<div class="button">
+									<i class="fas fa-pencil-alt" title="Édition du média"></i>
+									<i class="fas fa-trash-alt" title="Suppression du média"></i>
+								</div>
+							</div>
+						{% elseif media.vars.value.type == "vimeo" %}
+							<div class="d-flex flex-column justify-content-center overlay-play bg-image a-r-16-9" data-bs-toggle="modal" data-bs-target="#fullscreenMediaEditModal-{{ loop.index - 1 }}" data-controller="bg-image" bg-image-url="{{ videoIdExtractor.getVimeoThumbnail(videoIdExtractor.getVimeoId(media.vars.value.url)) }}">
+								<div class="icon">
+									<i class="fas fa-play"></i>
+								</div>
+								<div class="button">
+									<i class="fas fa-pencil-alt" title="Édition du média"></i>
+									<i class="fas fa-trash-alt" title="Suppression du média"></i>
+								</div>
+							</div>
+						{% endif %}
 
-				{% if trickSuccess is defined %}
-                    <div class="alert alert-success" data-controller="scroll-onload" id="createTrickSuccess">{{ trickSuccess|nl2br }}</div>
-                {% endif %}
+						{% include "parts/_fullscreen_media_edit_modal.html.twig" with { index: loop.index - 1, media: media } %}
+					</div>
+				{% endfor %}
+			</div>
+			<div class="d-lg-none d-flex row w-100 text-center my-3">
+				<div class="col-lg-12">
+					<button type="button" class="btn btn-primary text-light" data-controller="reveal" target="#trick_form_medias">Voir les médias</button>
+				</div>
+			</div>
+			<div class="row justify-content-center align-content-between w-100 text-center px-4">
+					<div class="d-none" data-controller="content-to-prototype" target="#trick_form_medias">
+						{{ form_widget(formTrick.medias.vars.prototype) }}
+					</div>
+				<div class="col-lg-12">
+					<button type="button" class="add-another-collection-widget btn btn-primary text-light m-1 mt-2" data-controller="media-add" data-list-selector="#trick_form_medias">Ajouter un autre média</button>
+				</div>
+			</div>
+			<div class="row justify-content-center align-content-between w-100 text-center px-4">
+				<div class="col-lg-12">
+					{{ form_row(formTrick.description) }}
+				</div>
+			</div>
+			<div class="row justify-content-center align-content-between w-100 text-center px-4">
+				<div class="col-lg-6 py-1">
+					{{ form_row(formTrick.category) }}
+				</div>
+				<div class="d-flex justify-content-center align-items-end col-lg-6">
+					<div class="form-group my-3 w-100">
+						<button type="button" class="btn btn-danger text-light mx-1 my-1" data-controller="update-delete-modal" data-bs-toggle="modal" data-bs-target="#trickDeleteModal" title="Supression de trick" body="Etes vous sure de vouloir supprimer ce trick ? Cette action est irrévocable." link="{{ path('app_trick_delete', { slug: formTrick.vars.value.slug }) }}">Supprimer le trick</button>
+						<button type="submit" class="btn btn-primary text-light mx-1 my-1">Sauvegarder le trick</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="modal modal-fullscreen fade" id="coverImageModal" tabindex="-1" aria-labelledby="coverImageModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="coverImageModalLabel">Édition de l'image de couverture</h5>
+							<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancel"></button>
+						</div>
+						<div class="modal-body py-0 min-vw-50 w-100 d-flex flex-column">
+							{{ form_row(formTrick.coverImage, {
+								'attr': {
+									'class': "m-0"
+								}
+							}) }}
+							<button type="submit" class="btn btn-primary text-light mb-3">Sauvegarder le trick</button>
+						</div>
+					</div>
+				</div>
 			</div>
 		{{ form_end(formTrick) }}
 	</article>
+
+	{% include "parts/_delete_modal.html.twig" %}
 {% endblock %}

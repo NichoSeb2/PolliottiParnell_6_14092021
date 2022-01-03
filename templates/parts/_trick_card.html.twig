@@ -4,12 +4,15 @@
 
 	{% if app.user %}
 		<div class="d-flex justify-content-end align-items-start align-self-center">
-			<a href="{{ path('app_trick_edit', { slug: trick.slug }) }}" class="btn p-1 fs-6">
+			<a href="{{ path('app_trick_edit', { slug: trick.slug }) }}" class="btn p-1 fs-6" title="Édition de trick">
 				<i class="fas fa-pencil-alt"></i>
 			</a>
-			<button type="button" class="btn p-1 fs-6" data-controller="update-trick-delete-modal" data-bs-toggle="modal" data-bs-target="#trickDeleteModal" slug="{{ trick.slug }}">
-				<i class="fas fa-trash-alt"></i>
-			</button>
+
+			{% if is_granted('delete_trick', trick) %}
+				<button type="button" class="btn p-1 fs-6" data-controller="update-delete-modal" data-bs-toggle="modal" data-bs-target="#trickDeleteModal" title="Supression de trick" body="Etes vous sure de vouloir supprimer ce trick ? Cette action est irrévocable." link="{{ path('app_trick_delete', { slug: trick.slug }) }}">
+					<i class="fas fa-trash-alt"></i>
+				</button>
+			{% endif %}
 		</div>
 	{% endif %}
 </div>

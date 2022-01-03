@@ -11,10 +11,13 @@ export default class extends Controller {
 
 		button.on("click", function() {
 			const button = $($(this).attr("data-bs-target") + "Button");
+			const content = button.parent().parent();
+			const title = content.children(".modal-header").children(".modal-title");
+			const body = content.children(".modal-body");
 
-			const link = Routing.generate("app_trick_delete", { slug: $(this).attr("slug") });
-
-			button.attr("href", link);
+			title.text($(this).attr("title"));
+			body.html($(this).attr("body"));
+			button.attr("href", $(this).attr("link"));
 		});
 	}
 }

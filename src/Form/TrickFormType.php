@@ -54,7 +54,7 @@ class TrickFormType extends AbstractType {
                 'entry_options' => [
                     'new' => $options['new'],
                     'attr' => [
-                        'data-controller' => "media-label-fix",
+                        'data-controller' => $options['new'] ? "media-label-fix" : "media-edit-label-fix",
                     ],
                 ],
                 'label' => 'form.trick.medias.label',

@@ -36,6 +36,14 @@
 	width: 80% !important;
 }
 
+.min-vw-50 {
+	min-width: 50vw;
+}
+
+.fw-inherit {
+	font-weight: inherit !important;
+}
+
 .modal-fullscreen {
 	.modal-dialog {
 		max-height: 90vh;
