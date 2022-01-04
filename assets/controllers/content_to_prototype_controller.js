@@ -44,6 +44,7 @@ export default class extends Controller {
         fieldset.append(container.html().trim());
 
         body.append(fieldset);
+        body.append($(`<p class="form-text m-0 mb-3 help-text"><i class="fas fa-info-circle"></i> ` + "La création de ce média ne sera réellement effectuée qu'après-avoir sauvegardé le trick." + `</p>`));
         content.append(header);
         content.append(body);
         dialog.append(content);
@@ -54,6 +55,7 @@ export default class extends Controller {
         const fakeContainer = $("<span></span>");
         fakeContainer.append(parent);
 
+        container.html("");
         $(container.attr("target")).attr("data-prototype", fakeContainer.html().trim());
     }
 }

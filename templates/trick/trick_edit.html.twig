@@ -28,7 +28,7 @@
 						<button type="button" class="btn p-1 fs-6" data-bs-toggle="modal" data-bs-target="#coverImageModal" title="Édition de l'image de couverture">
 							<i class="fas fa-pencil-alt"></i>
 						</button>
-						<button type="button" class="btn p-1 fs-6" data-controller="update-delete-modal" data-bs-toggle="modal" data-bs-target="#trickDeleteModal" title="Supression de l'image de couverture" body="Etes vous sure de vouloir supprimer cette image de couverture ? Cette action est irrévocable." link="{{ path('app_cover_image_delete', { slug: formTrick.vars.value.slug }) }}">
+						<button type="button" class="btn p-1 fs-6" data-controller="update-delete-modal" data-bs-toggle="modal" data-bs-target="#trickDeleteModal" title="Supression de l'image de couverture" body="Etes vous sure de vouloir supprimer cette image de couverture ? Cette action est irrévocable." link="{{ path('app_cover_image_delete', { slug: formTrick.vars.value.slug }) }}" help="Cette action entraînera la perte de toutes les modifications non sauvegardées.">
 							<i class="fas fa-trash-alt"></i>
 						</button>
 					</div>
@@ -113,6 +113,7 @@
 									'class': "m-0"
 								}
 							}) }}
+							<p class="form-text text-center m-0 mb-3 help-text"><i class="fas fa-info-circle"></i> Cette action entraînera la sauvegarde de toutes les modifications, y compris celles externes a l'édition de l'image de couverture.</p>
 							<button type="submit" class="btn btn-primary text-light mb-3">Sauvegarder le trick</button>
 						</div>
 					</div>

@@ -14,9 +14,19 @@ export default class extends Controller {
 			const content = button.parent().parent();
 			const title = content.children(".modal-header").children(".modal-title");
 			const body = content.children(".modal-body");
+			const footer = content.children(".modal-footer");
 
 			title.text($(this).attr("title"));
 			body.html($(this).attr("body"));
+
+			footer.children("span").html("");
+			if ($(this).attr("help") != undefined) {
+				footer.addClass("justify-content-center");
+				footer.children("span").append($(`<p class="form-text text-center m-0 mt-3 help-text"><i class="fas fa-info-circle"></i> ` + $(this).attr("help") + `</p>`));
+			} else {
+				footer.removeClass("justify-content-center");
+			}
+
 			button.attr("href", $(this).attr("link"));
 		});
 	}
