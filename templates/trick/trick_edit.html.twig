@@ -16,14 +16,6 @@
 		{{ form_start(formTrick) }}
 			<div class="position-relative d-flex flex-column justify-content-center align-content-between w-100 text-center bg-image bg-shade" data-controller="bg-image" bg-image-url="{{ formTrick.vars.value.coverImage.url|default(asset('images/placeholder.png')) }}" title="{{ formTrick.vars.value.coverImage.alt|default("Ce trick n'a pas d'image de couverture, il prendra automatiquement le premier media de type image l'ors de son affichage.") }}" min-height="500px">
 				<div class="col-lg-12">
-					{{ form_widget(formTrick.name, {
-						'attr': {
-							'class': 'text-center text-white bg-transparent border-0 shadow-none fs-1 fw-inherit'
-						}
-					}) }}
-					{{ form_errors(formTrick.name) }}
-					{{ form_help(formTrick.name) }}
-
 					<div class="position-absolute top-0 end-0">
 						<button type="button" class="btn p-1 fs-6" data-bs-toggle="modal" data-bs-target="#coverImageModal" title="Édition de l'image de couverture">
 							<i class="fas fa-pencil-alt"></i>
@@ -81,6 +73,11 @@
 					</div>
 				<div class="col-lg-12">
 					<button type="button" class="add-another-collection-widget btn btn-primary text-light m-1 mt-2" data-controller="media-add" data-list-selector="#trick_form_medias">Ajouter un autre média</button>
+				</div>
+			</div>
+			<div class="row justify-content-center align-content-between w-100 text-center px-4">
+				<div class="col-lg-12">
+					{{ form_row(formTrick.name) }}
 				</div>
 			</div>
 			<div class="row justify-content-center align-content-between w-100 text-center px-4">

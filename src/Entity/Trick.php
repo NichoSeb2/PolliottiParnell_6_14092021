@@ -41,7 +41,7 @@ class Trick {
     private $medias;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="text")
      */
     private $description;
 

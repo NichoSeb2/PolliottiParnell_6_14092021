@@ -23,6 +23,7 @@ class TrickFormType extends AbstractType {
                         'message' => "form.trick.name.not-blank", 
                     ]), 
                 ], 
+                'empty_data' => "",
             ])
             ->add('description', null, [
                 'label' => "form.trick.description.label", 
