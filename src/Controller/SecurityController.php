@@ -85,10 +85,9 @@ class SecurityController extends AbstractController {
             $entityManager->persist($user);
             $entityManager->flush();
 
-            return $this->render('security/register.html.twig', [
-                'form' => $form->createView(),
-                'success' => $translator->trans("form.register.success", [], "validators")
-            ]);
+            $this->addFlash("success", $translator->trans("form.register.success", [], "validators"));
+
+            return $this->redirectToRoute("app_home");
         }
 
         return $this->render('security/register.html.twig', [
@@ -231,11 +230,9 @@ class SecurityController extends AbstractController {
                 $manager->persist($user);
                 $manager->flush();
 
-                return $this->render('security/reset_password.html.twig', [
-                    'token' => $token,
-                    'form' => $form->createView(),
-                    'success' => $translator->trans("form.reset-password.success", [], "validators")
-                ]);
+                $this->addFlash("success", $translator->trans("form.reset-password.success", [], "validators"));
+
+                return $this->redirectToRoute("app_home");
             }
         } else {
             $form->addError(new FormError($translator->trans("form.reset-password.errors.bad-token", [], "validators")));
