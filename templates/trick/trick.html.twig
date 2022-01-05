@@ -172,8 +172,9 @@
 		<div class="row justify-content-center align-content-between w-100 text-center px-2" id="commentsContainer">
 			{% for comment in trick.comments %}
 				<div class="col-lg-8 bg-white border mx-2 my-1 px-2 py-1 d-flex flex-row align-items-center">
-					<h6 class="text-nowrap">{{ comment.author.username }}, {{ comment.createdAt|date("d/m/Y") }} : </h6>
-					<p class="px-2">{{ comment.content }}</p>
+					<img src="/images/avatar.jpg" alt="Avatar" class="rounded" style="height: 40px;">
+					<h6 class="text-nowrap px-2 fs-6">{{ comment.author.username }}, {{ comment.createdAt|date("d/m/Y") }} : </h6>
+					<p class="fs-6">{{ comment.content }}</p>
 				</div>
 			{% else %}
 				<div class="col-lg-8 mx-2 my-1 px-2 py-1 d-flex flex-row justify-content-center align-items-center">
