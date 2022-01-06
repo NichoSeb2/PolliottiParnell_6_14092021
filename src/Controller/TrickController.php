@@ -117,6 +117,12 @@ class TrickController extends AbstractController {
             $entityManager->flush();
         }
 
+        if (!is_null($trick->getCoverImage())) {
+            $entityManager->remove($trick->getCoverImage());
+            $trick->setCoverImage(null);
+            $entityManager->flush();
+        }
+
         $entityManager->remove($trick);
         $entityManager->flush();
 
