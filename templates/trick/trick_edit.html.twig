@@ -68,9 +68,10 @@
 				</div>
 			</div>
 			<div class="row justify-content-center align-content-between w-100 text-center px-4">
-					<div class="d-none" data-controller="content-to-prototype" target="#trick_form_medias">
-						{{ form_widget(formTrick.medias.vars.prototype) }}
-					</div>
+				<div class="d-none" data-controller="content-to-prototype" target="#trick_form_medias">
+					{{ form_widget(formTrick.medias.vars.prototype) }}
+					{% do formTrick.medias.setRendered %}
+				</div>
 				<div class="col-lg-12">
 					<button type="button" class="add-another-collection-widget btn btn-primary text-light m-1 mt-2" data-controller="media-add" data-list-selector="#trick_form_medias">Ajouter un autre média</button>
 				</div>
