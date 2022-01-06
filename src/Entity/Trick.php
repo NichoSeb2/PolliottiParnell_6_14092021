@@ -14,6 +14,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=TrickRepository::class)
+ * @UniqueEntity(fields={"name"}, message="Il existe déjà un trick avec ce nom")
  * @UniqueEntity(fields={"slug"}, message="Il existe déjà un trick avec cette slug")
  */
 class Trick {
@@ -41,7 +42,7 @@ class Trick {
     private $medias;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="text")
      */
     private $description;
 

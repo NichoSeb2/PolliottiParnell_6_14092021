@@ -23,7 +23,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class TrickController extends AbstractController {
-    public const INITIAL_TRICKS_DISPLAYED = 5;
+    public const INITIAL_TRICKS_DISPLAYED = 0;
     public const ADDITIONAL_TRICKS_DISPLAYED = 5;
 
     /**
@@ -117,12 +117,32 @@ class TrickController extends AbstractController {
             $entityManager->flush();
         }
 
+        if (!is_null($trick->getCoverImage())) {
+            $entityManager->remove($trick->getCoverImage());
+            $trick->setCoverImage(null);
+            $entityManager->flush();
+        }
+
         $entityManager->remove($trick);
         $entityManager->flush();
 
         $this->addFlash("success", $translator->trans("form.delete-trick.success", [], "validators"));
 
         return $this->redirectToRoute("app_home");
+    }
+
+    /**
+     * @Route("/cover-image/{slug}/delete", name="app_cover_image_delete", options={"expose"=true})
+     */
+    public function deleteCoverImage(Trick $trick, EntityManagerInterface $entityManager): Response {
+        $entityManager->remove($trick->getCoverImage());
+
+        $trick->setCoverImage(null);
+
+        $entityManager->persist($trick);
+        $entityManager->flush();
+
+        return $this->redirectToRoute("app_trick_edit", ['slug' => $trick->getSlug()]);
     }
 
     /**
@@ -166,8 +186,12 @@ class TrickController extends AbstractController {
     /**
      * @Route("/trick_load_more/{loaded}/{to_load}", name="app_trick_load_more", options={"expose"=true})
      */
-    public function load_more(int $loaded, int $to_load, TrickRepository $trickRepository): Response {
+    public function load_more(int $loaded, int $to_load, TrickManager $trickManager, TrickRepository $trickRepository): Response {
         $tricks = $trickRepository->findBy([], ['createdAt' => "DESC"], $to_load, $loaded);
+
+        foreach ($tricks as $index => $trick) {
+            $trick = $trickManager->fixDefaultCoverImage($trick);
+        }
 
         $response = new Response($this->render('trick/trick_load_more.html.twig', [
             'tricks' => $tricks, 

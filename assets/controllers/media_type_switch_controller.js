@@ -4,6 +4,8 @@ export default class extends Controller {
     connect() {
 		const container = $(this.element);
 
+        container.removeClass("flex-column");
+
         container.children("div").children("input").each((index, element) => {
             $(element).on("click", () => {
                 this.update(container);

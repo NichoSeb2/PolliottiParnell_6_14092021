@@ -23,6 +23,7 @@ class TrickFormType extends AbstractType {
                         'message' => "form.trick.name.not-blank", 
                     ]), 
                 ], 
+                'empty_data' => "",
             ])
             ->add('description', null, [
                 'label' => "form.trick.description.label", 
@@ -54,7 +55,7 @@ class TrickFormType extends AbstractType {
                 'entry_options' => [
                     'new' => $options['new'],
                     'attr' => [
-                        'data-controller' => "media-label-fix",
+                        'data-controller' => $options['new'] ? "media-label-fix" : "media-edit-label-fix",
                     ],
                 ],
                 'label' => 'form.trick.medias.label',

@@ -1,4 +1,4 @@
-<nav class="position-fixed position-lg-absolute zi-1 navbar navbar-expand-lg navbar-light w-100 bg-lg-transparent bg-white">
+<nav class="position-absolute zi-1 navbar navbar-expand-lg navbar-light w-100 bg-transparent d-none d-lg-flex">
 	<div class="container w-100 mw-100">
 		<a class="navbar-brand fs-3 fw-bold" href="{{ path('app_home') }}">SnowTricks</a>
 		<button class="navbar-toggler bg-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -10,12 +10,21 @@
 					<a class="nav-link {{ app.request.get('_route') == 'app_home' ? 'active' : '' }}" href="{{ path('app_home') }}">Accueil</a>
 				</li>
 				<li class="nav-item">
+					<a class="nav-link" href="{{ path('app_home') }}#top">Tricks</a>
+				</li>
+				<li class="nav-item">
 					<a class="nav-link {{ app.request.get('_route') == 'app_trick_create' ? 'active' : '' }}" href="{{ path('app_trick_create') }}">Créer un trick</a>
 				</li>
 				{% if app.user %}
 					{% if is_granted('ROLE_ADMIN') %}
-						<li class="nav-item">
-							<a class="nav-link" href="{{ path('app_admin_comment') }}">Admin</a>
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle {{ (app.request.get('_route') == 'app_admin_comment' or app.request.get('_route') == 'app_admin_comment') ? 'show' : '' }}" href="#" id="navbarDropdownAdmin" role="button" data-bs-toggle="dropdown" aria-expanded=" {{ (app.request.get('_route') == 'app_admin_comment' or app.request.get('_route') == 'app_admin_comment') ? 'true' : 'false' }}">
+								Admin
+							</a>
+							<ul class="dropdown-menu rounded-0 {{ (app.request.get('_route') == 'app_admin_comment' or app.request.get('_route') == 'app_admin_comment') ? 'show' : '' }}" aria-labelledby="navbarDropdownAdmin">
+								<li><a class="dropdown-item" href="{{ path('app_admin_comment') }}">Gestion des commentaires</a></li>
+								<li><a class="dropdown-item" href="#">Gestion des catégories</a></li>
+							</ul>
 						</li>
 					{% endif %}
 					<li class="nav-item">
@@ -32,4 +41,20 @@
 			</ul>
 		</div>
 	</div>
+</nav>
+<nav class="position-fixed bottom-0 zi-1 w-100 abg-white bg-black d-block d-lg-none">
+	<ul class="list-unstyled m-0 w-100 h-100 d-flex flex-row justify-content-around">
+		<li class="m-2"><a class="text-light fs-3" href="{{ path('app_home') }}"><i class="fas fa-home"></i></a></li>
+		<li class="m-2"><a class="text-light fs-3" href="{{ path('app_home') }}#top"><i class="fas fa-snowboarding"></i></a></li>
+		<li class="m-2"><a class="text-light fs-3" href="{{ path('app_trick_create') }}"><i class="fas fa-plus-circle"></i></a></li>
+		{% if app.user %}
+			{% if is_granted('ROLE_ADMIN') %}
+				<li class="m-2"><a class="text-light fs-3" href="{{ path('app_admin_comment') }}"><i class="fas fa-comments"></i></a></li>
+				<li class="m-2"><a class="text-light fs-3" href="#"><i class="fas fa-tags"></i></a></li>
+			{% endif %}
+			<li class="m-2"><a class="text-light fs-3" href="{{ path('app_logout') }}"><i class="fas fa-sign-out-alt"></i></a></li>
+		{% else %}
+			<li class="m-2"><a class="text-light fs-3" href="{{ path('app_login') }}"><i class="fas fa-sign-in-alt"></i></a></li>
+		{% endif %}
+	</ul>
 </nav>
