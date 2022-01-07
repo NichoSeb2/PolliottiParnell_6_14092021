@@ -41,3 +41,6 @@ form:
       url: 
         label: "Lien de la vidéo"
         help: '<i class="fas fa-info-circle"></i> Lien Youtube ou Vimeo'
+  category:
+    name:
+      label: "Nom"

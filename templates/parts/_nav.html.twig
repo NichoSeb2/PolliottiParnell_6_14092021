@@ -18,12 +18,12 @@
 				{% if app.user %}
 					{% if is_granted('ROLE_ADMIN') %}
 						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle {{ (app.request.get('_route') == 'app_admin_comment' or app.request.get('_route') == 'app_admin_comment') ? 'show' : '' }}" href="#" id="navbarDropdownAdmin" role="button" data-bs-toggle="dropdown" aria-expanded=" {{ (app.request.get('_route') == 'app_admin_comment' or app.request.get('_route') == 'app_admin_comment') ? 'true' : 'false' }}">
+							<a class="nav-link dropdown-toggle {{ (app.request.get('_route') == 'app_admin_comment' or app.request.get('_route') == 'app_admin_category') ? 'show' : '' }}" href="#" id="navbarDropdownAdmin" role="button" data-bs-toggle="dropdown" aria-expanded=" {{ (app.request.get('_route') == 'app_admin_comment' or app.request.get('_route') == 'app_admin_category') ? 'true' : 'false' }}">
 								Admin
 							</a>
-							<ul class="dropdown-menu rounded-0 {{ (app.request.get('_route') == 'app_admin_comment' or app.request.get('_route') == 'app_admin_comment') ? 'show' : '' }}" aria-labelledby="navbarDropdownAdmin">
+							<ul class="dropdown-menu rounded-0 {{ (app.request.get('_route') == 'app_admin_comment' or app.request.get('_route') == 'app_admin_category') ? 'show' : '' }}" aria-labelledby="navbarDropdownAdmin">
 								<li><a class="dropdown-item" href="{{ path('app_admin_comment') }}">Gestion des commentaires</a></li>
-								<li><a class="dropdown-item" href="#">Gestion des catégories</a></li>
+								<li><a class="dropdown-item" href="{{ path('app_admin_category') }}">Gestion des catégories</a></li>
 							</ul>
 						</li>
 					{% endif %}
@@ -50,7 +50,7 @@
 		{% if app.user %}
 			{% if is_granted('ROLE_ADMIN') %}
 				<li class="m-2"><a class="text-light fs-3" href="{{ path('app_admin_comment') }}"><i class="fas fa-comments"></i></a></li>
-				<li class="m-2"><a class="text-light fs-3" href="#"><i class="fas fa-tags"></i></a></li>
+				<li class="m-2"><a class="text-light fs-3" href="{{ path('app_admin_category') }}"><i class="fas fa-tags"></i></a></li>
 			{% endif %}
 			<li class="m-2"><a class="text-light fs-3" href="{{ path('app_logout') }}"><i class="fas fa-sign-out-alt"></i></a></li>
 		{% else %}
