@@ -64,3 +64,7 @@ form:
     success: "Le trick a bien été mis à jour."
   delete-trick:
     success: "Le trick a bien été supprimé."
+  category:
+    success: "La catégorie a bien été créée."
+    name:
+      not-blank: "Veuillez entrer un nom."
