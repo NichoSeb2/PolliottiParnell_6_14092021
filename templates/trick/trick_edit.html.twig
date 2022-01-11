@@ -16,11 +16,11 @@
 		{{ form_start(formTrick) }}
 			<div class="position-relative d-flex flex-column justify-content-center align-content-between w-100 text-center bg-image bg-shade" data-controller="bg-image" bg-image-url="{{ formTrick.vars.value.coverImage.url|default(asset('images/placeholder.png')) }}" title="{{ formTrick.vars.value.coverImage.alt|default("Ce trick n'a pas d'image de couverture, il prendra automatiquement le premier media de type image l'ors de son affichage.") }}" min-height="500px">
 				<div class="col-lg-12">
-					<div class="position-absolute top-0 end-0">
-						<button type="button" class="btn p-1 fs-6" data-bs-toggle="modal" data-bs-target="#coverImageModal" title="Édition de l'image de couverture">
+					<div class="position-absolute top-0 end-0 edit-delete-button">
+						<button type="button" class="btn m-0 p-0 fs-6" data-bs-toggle="modal" data-bs-target="#coverImageModal" title="Édition de l'image de couverture">
 							<i class="fas fa-pencil-alt"></i>
 						</button>
-						<button type="button" class="btn p-1 fs-6" data-controller="update-delete-modal" data-bs-toggle="modal" data-bs-target="#trickDeleteModal" title="Supression de l'image de couverture" body="Etes vous sure de vouloir supprimer cette image de couverture ? Cette action est irrévocable." link="{{ path('app_cover_image_delete', { slug: formTrick.vars.value.slug }) }}" help="Cette action entraînera la perte de toutes les modifications non sauvegardées.">
+						<button type="button" class="btn m-0 p-0 fs-6" data-controller="update-delete-modal" data-bs-toggle="modal" data-bs-target="#trickDeleteModal" title="Supression de l'image de couverture" body="Etes vous sure de vouloir supprimer cette image de couverture ? Cette action est irrévocable." link="{{ path('app_cover_image_delete', { slug: formTrick.vars.value.slug }) }}" help="Cette action entraînera la perte de toutes les modifications non sauvegardées.">
 							<i class="fas fa-trash-alt"></i>
 						</button>
 					</div>

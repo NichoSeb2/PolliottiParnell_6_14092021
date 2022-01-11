@@ -12,7 +12,8 @@ class VideoIdExtractor {
     }
 
     public function getYoutubeThumbnail(string $id): string {
-        return "https://img.youtube.com/vi/$id/maxresdefault.jpg";
+        // return "https://img.youtube.com/vi/$id/maxresdefault.jpg";
+        return "https://img.youtube.com/vi/$id/hqdefault.jpg";
     }
 
     public function getYoutubeTitle(string $id): string {

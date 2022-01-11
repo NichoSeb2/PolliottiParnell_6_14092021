@@ -46,13 +46,13 @@
 				<h1 class="text-white">{{ trick.name }}</h1>
 
 				{% if app.user %}
-					<div class="position-absolute top-0 end-0">
-						<a href="{{ path('app_trick_edit', { slug: trick.slug }) }}" class="btn p-1 fs-6" title="Édition de trick">
+					<div class="position-absolute top-0 end-0 edit-delete-button">
+						<a href="{{ path('app_trick_edit', { slug: trick.slug }) }}" class="btn m-0 p-0 fs-6" title="Édition de trick">
 							<i class="fas fa-pencil-alt"></i>
 						</a>
 
 						{% if is_granted('delete_trick', trick) %}
-							<button type="button" class="btn p-1 fs-6" data-controller="update-delete-modal" data-bs-toggle="modal" data-bs-target="#trickDeleteModal" title="Supression de trick" body="Etes vous sure de vouloir supprimer ce trick ? Cette action est irrévocable." link="{{ path('app_trick_delete', { slug: trick.slug }) }}">
+							<button type="button" class="btn m-0 p-0 fs-6" data-controller="update-delete-modal" data-bs-toggle="modal" data-bs-target="#trickDeleteModal" title="Supression de trick" body="Etes vous sure de vouloir supprimer ce trick ? Cette action est irrévocable." link="{{ path('app_trick_delete', { slug: trick.slug }) }}">
 								<i class="fas fa-trash-alt"></i>
 							</button>
 						{% endif %}

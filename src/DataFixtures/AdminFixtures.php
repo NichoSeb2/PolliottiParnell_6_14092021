@@ -3,52 +3,38 @@
 namespace App\DataFixtures;
 
 use App\Entity\User;
-use Symfony\Component\Uid\Uuid;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class UserFixtures extends Fixture implements OrderedFixtureInterface, FixtureGroupInterface {
-	public const VERIFIED_USER_REFERENCE = "verified_user";
-	public const NOT_VERIFIED_USER_REFERENCE = "not_verified_user";
+class AdminFixtures extends Fixture implements OrderedFixtureInterface, FixtureGroupInterface {
+	public const ADMIN_REFERENCE = "admin";
 
 	public function __construct(private UserPasswordHasherInterface $passwordHasher) {}
 
 	public function getOrder() {
-		return 2;
+		return 1;
 	}
 
 	public static function getGroups(): array {
-        return ['samples_data'];
+        return ['users', 'samples_data'];
     }
 
 	public function load(ObjectManager $manager) {
 		$user = new User();
 		$user
-			->setUsername("John Doe")
-			->setEmail("john.doe@example.com")
+			->setUsername("Administrator")
+			->setEmail("administrator@snowtricks.com")
+			->setRoles(['ROLE_ADMIN'])
 			->setIsVerified(true)
 			->setPassword($this->passwordHasher->hashPassword(
 				$user,
 				'Password'
 			))
 		;
-		$this->addReference(self::VERIFIED_USER_REFERENCE, $user);
-		$manager->persist($user);
-
-		$user = new User();
-		$user
-			->setUsername("Jane Doe")
-			->setEmail("jane.doe@gmail.com")
-			->setVerificationToken(Uuid::v4())
-			->setPassword($this->passwordHasher->hashPassword(
-				$user,
-				'Password'
-			))
-		;
-		$this->addReference(self::NOT_VERIFIED_USER_REFERENCE, $user);
+		$this->addReference(self::ADMIN_REFERENCE, $user);
 		$manager->persist($user);
 
 		$manager->flush();

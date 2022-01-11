@@ -13,11 +13,9 @@
 {% block body %}
 	<div class="row justify-content-center align-content-between mt-4 mb-4 px-2" id="tricksContainer">
 		{% for trick in tricks %}
-			<div class="col-lg-2 card m-2 p-0">
+			<div class="col-lg-2 card mx-2 p-0">
 				{% include "parts/_trick_card.html.twig" with { trick } %}
 			</div>
-		{% else %}
-			
 		{% endfor %}
 	</div>
 
