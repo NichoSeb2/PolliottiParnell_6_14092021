@@ -50,6 +50,10 @@ export default class extends Controller {
 
                     const threshold = parseInt(button.attr("threshold"));
 
+                    if ((loaded + elements.length) == 0) {
+                        container.append($(`<div class="col-lg-22"><p class="text-center">` + "Il n'y a pour l'instant aucun trick." + `</p></div>`))
+                    }
+
                     if ((loaded + elements.length) >= max_element) {
                         button.parent().remove();
                     }

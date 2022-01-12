@@ -26,12 +26,9 @@ Type the following to setup the database :
  * `php bin/console make:migration`
  * `php bin/console doctrine:migrations:migrate`
 
-To load provided data for production :
- * Start with no data : `php bin/console doctrine:fixtures:load --purger=purger --group=users`
- * Next you can add samples data : `php bin/console doctrine:fixtures:load --purger=purger --group=samples_data`
-
-To load provided data for development :
- * Start with fake data : `php bin/console doctrine:fixtures:load --purger=purger --group=dev`
+To load provided data :
+ * To start with only users data : `php bin/console doctrine:fixtures:load --purger=purger --group=users`
+ * To start with samples data : `php bin/console doctrine:fixtures:load --purger=purger --group=samples_data`
 
 ## Secure your site
 ### Admin access 

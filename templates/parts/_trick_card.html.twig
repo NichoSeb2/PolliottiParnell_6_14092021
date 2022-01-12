@@ -1,6 +1,6 @@
 <a href="{{ path('app_trick', { slug: trick.slug }) }}"><img class="card-img-top w-100" src="{{ trick.coverImage.url|default(asset('images/background.jpg')) }}" alt="{{ trick.coverImage.alt|default("Image par défaut, aucune image de couverture n'a été données.") }}"></a>
 <div class="card-body p-1 d-flex flex-rox justify-content-between align-content-center">
-	<h5 class="card-title m-0 p-1 align-self-center">{{ trick.name }}</h5>
+	<h5 class="card-title m-0 p-1 align-self-center"><a class="text-black text-decoration-none" href="{{ path('app_trick', { slug: trick.slug }) }}">{{ trick.name }}</a></h5>
 
 	{% if app.user %}
 		<div class="d-flex justify-content-end align-items-start align-self-center">
