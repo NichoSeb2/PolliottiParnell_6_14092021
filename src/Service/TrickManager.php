@@ -72,37 +72,11 @@ class TrickManager {
 
 			switch ($mode) {
 				case self::CREATE_MODE:
-					switch ($mediaData->get("type")->getData()) {
-						case Media::MEDIA_TYPE_LOCAL_FILE:
-							$mediaFile = $mediaData->get("file")->getData();
-							$media
-								->setUrl($this->mediaUploader->uploadFile($mediaFile, Media::UPLOAD_DIR))
-								->setAlt($mediaData->get("alt")->getData())
-							;
-							break;
-						case Media::MEDIA_TYPE_URL:
-							$media->setUrl($mediaData->get("url")->getData());
-							break;
-						default:
-							break;
-					}
+					$media = $this->updateMedia($mediaData, $media);
 					break;
 				case self::EDIT_MODE:
 					if (is_null($media->getId())) {
-						switch ($mediaData->get("type")->getData()) {
-							case Media::MEDIA_TYPE_LOCAL_FILE:
-								$mediaFile = $mediaData->get("file")->getData();
-								$media
-									->setUrl($this->mediaUploader->uploadFile($mediaFile, Media::UPLOAD_DIR))
-									->setAlt($mediaData->get("alt")->getData())
-								;
-								break;
-							case Media::MEDIA_TYPE_URL:
-								$media->setUrl($mediaData->get("url")->getData());
-								break;
-							default:
-								break;
-						}
+						$media = $this->updateMedia($mediaData, $media);
 					} else {
 						if ($this->mediaUploader->isValidVideoUrl($media->getUrl())) {
 							$media->setUrl($mediaData->get("url")->getData());
@@ -160,5 +134,24 @@ class TrickManager {
 		}
 
 		return $trick;
+	}
+
+	private function updateMedia(FormInterface $mediaData, Media $media): Media {
+		switch ($mediaData->get("type")->getData()) {
+			case Media::MEDIA_TYPE_LOCAL_FILE:
+				$mediaFile = $mediaData->get("file")->getData();
+				$media
+					->setUrl($this->mediaUploader->uploadFile($mediaFile, Media::UPLOAD_DIR))
+					->setAlt($mediaData->get("alt")->getData())
+				;
+				break;
+			case Media::MEDIA_TYPE_URL:
+				$media->setUrl($mediaData->get("url")->getData());
+				break;
+			default:
+				break;
+		}
+
+		return $media;
 	}
 }
