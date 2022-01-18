@@ -10,6 +10,8 @@
 * NodeJs
 * A Database engine (Mysql, PostgreSQL...)
 * SMTP server accessible from the machine hosting the site
+* Symfony CLI
+  * All requirement should be matched, to check them use : `symfony check:requirements`
 
 ## Site installation
 * Clone or download the project
@@ -23,8 +25,9 @@
 ## Database setup
 Type the following to setup the database :
  * `php bin/console doctrine:database:create`
- * `php bin/console make:migration`
  * `php bin/console doctrine:migrations:migrate`
+
+**Important :** To be able to load the provided data, you need to set the **APP_ENV** to **dev** in your .env.local file.
 
 To load provided data :
  * To start with only users data : `php bin/console doctrine:fixtures:load --purger=purger --group=users`
